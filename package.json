@@ -9,14 +9,39 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mantine/charts": "^7.16.1",
+    "@mantine/core": "^7.16.1",
+    "@mantine/dates": "^7.16.1",
+    "@mantine/dropzone": "^7.16.1",
+    "@mantine/form": "^7.16.1",
+    "@mantine/hooks": "^7.16.1",
+    "@mantine/modals": "^7.16.1",
+    "@mantine/notifications": "^7.16.1",
+    "axios": "^1.7.9",
+    "bcrypt": "^5.1.1",
+    "dayjs": "^1.11.13",
+    "framer-motion": "^12.0.0",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
+    "mongoose": "^8.9.5",
+    "next": "15.1.5",
+    "next-auth": "^4.24.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.1.5"
+    "react-icons": "^5.4.0",
+    "recharts": "^2.15.0",
+    "xlsx": "file:vendor/xlsx-0.20.3.tgz",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@types/bcrypt": "^5.0.2",
+    "@types/file-saver": "^2.0.7",
     "@types/node": "^20",
     "@types/react": "^19",
-    "@types/react-dom": "^19"
+    "@types/react-dom": "^19",
+    "postcss": "^8.5.1",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
+    "typescript": "^5"
   }
 }

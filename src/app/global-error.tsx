@@ -2,14 +2,11 @@
 
 import { Button, Container } from '@mantine/core'
 import { BiReset as ResetIcon } from 'react-icons/bi'
+
 import ErrorMsg from '@components/common/error-msg'
+import { AppErrorProps } from '@types'
 
-type Props = {
-  error: Error
-  reset: () => void
-}
-
-const GlobalError = ({ error, reset }: Props) => (
+const GlobalError = ({ error, reset }: AppErrorProps) => (
   <html>
     <body>
       <Container>

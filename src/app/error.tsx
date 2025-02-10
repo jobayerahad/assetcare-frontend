@@ -4,14 +4,11 @@ import Link from 'next/link'
 import { Button, Container, Group } from '@mantine/core'
 import { BiReset as ResetIcon } from 'react-icons/bi'
 import { TiArrowBack as BackIcon } from 'react-icons/ti'
+
 import ErrorMsg from '@components/common/error-msg'
+import { AppErrorProps } from '@types'
 
-type Props = {
-  error: Error
-  reset: () => void
-}
-
-const Error = ({ error, reset }: Props) => (
+const Error = ({ error, reset }: AppErrorProps) => (
   <Container>
     <ErrorMsg error={error} />
 

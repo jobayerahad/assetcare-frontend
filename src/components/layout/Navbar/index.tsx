@@ -5,15 +5,13 @@ import { NavLink, ScrollArea } from '@mantine/core'
 
 import classes from './styles.module.css'
 import { menuItems, isActiveLink, isMenuWithLinks } from './list'
-import { useSession } from 'next-auth/react'
 
 const AppNavbar = () => {
   const pathname = usePathname()
-  const { data: session } = useSession()
 
   return (
     <ScrollArea className={classes.root} p="xs">
-      {menuItems(session?.user.roles || []).map((item, index) =>
+      {menuItems.map((item, index) =>
         isMenuWithLinks(item) ? (
           <NavLink
             label={item.label}

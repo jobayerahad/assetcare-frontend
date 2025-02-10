@@ -1,5 +1,4 @@
 import clsx from 'clsx'
-import { ReactNode } from 'react'
 import type { Metadata } from 'next'
 import { MantineProvider, ColorSchemeScript } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
@@ -12,6 +11,7 @@ import '@mantine/notifications/styles.css'
 import './globals.css'
 import { theme } from '@config/theme'
 import AuthLayout from '@components/layout/main'
+import { WrapperProps } from '@types'
 
 const work_sans = Work_Sans({
   subsets: ['latin'],
@@ -36,11 +36,7 @@ export const metadata: Metadata = {
   publisher: 'SBAC Bank PLC'
 }
 
-type Props = {
-  children: ReactNode
-}
-
-const RootLayout = ({ children }: Props) => (
+const RootLayout = ({ children }: WrapperProps) => (
   <html lang="en" className={clsx(work_sans.variable, lora.variable)} suppressHydrationWarning>
     <head>
       <ColorSchemeScript defaultColorScheme="auto" />

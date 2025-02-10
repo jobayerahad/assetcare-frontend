@@ -29,10 +29,10 @@ const AppHeader = () => {
     <Group justify="space-between" align="center" px="md" h="100%">
       <Link href="/">
         <Image
-          src={`/images/logo${computedColorScheme === 'light' ? '' : '-white'}.png`}
+          src={`/sbac-logo${computedColorScheme === 'light' ? '' : '-white'}.png`}
           alt=""
           width="auto"
-          height={32}
+          height={48}
         />
       </Link>
 

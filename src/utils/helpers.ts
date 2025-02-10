@@ -10,3 +10,18 @@ export const capWords = (str: string, exceptions: string[] = []) => {
     })
     .join(' ')
 }
+
+export const paginateRes = <T>(data: T[], totalRecords: number, page: number, limit: number) => {
+  const totalPages = Math.ceil(totalRecords / limit)
+
+  return {
+    data,
+    paginationInfo: {
+      totalRecords,
+      totalPages,
+      currentPage: page,
+      hasNextPage: page < totalPages,
+      hasPrevPage: page > 1
+    }
+  }
+}

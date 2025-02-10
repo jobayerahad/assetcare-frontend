@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import { AiOutlineDashboard as DashboardIcon } from 'react-icons/ai'
+import { MdAttachMoney as CostIcon } from 'react-icons/md'
 
 type MenuItem = {
   link: string
@@ -10,18 +11,17 @@ type MenuItem = {
 type MenuWithLinks = {
   label: string
   icon: ReactNode
-  links: {
-    link: string
-    label: string
-    icon: ReactNode
-  }[]
+  links: MenuItem[]
 }
 
 type MenuItems = MenuItem | MenuWithLinks
 
-export const menuItems = [{ link: '/', label: 'Dashboard', icon: <DashboardIcon /> }]
+export const menuItems = [
+  { link: '/', label: 'Dashboard', icon: <DashboardIcon /> },
+  { link: '/repair-costs', label: 'Repair Costs', icon: <CostIcon /> }
+]
 
-export const isActiveLink = (path: string, link: string = ''): boolean => {
+export const isActiveLink = (path: string, link: string = '') => {
   if (link === '/') return path === link
 
   const nextChar = path[link.length]

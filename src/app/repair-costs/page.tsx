@@ -15,11 +15,11 @@ export const metadata: Metadata = {
   title: 'Repair Costs'
 }
 
-const Banks = async (props: Props) => {
+const RepairCosts = async (props: Props) => {
   const { limit, page, search } = await props.searchParams
   const data = await getRepairCosts(page, limit, search)
 
   return <RepairCostList data={data} />
 }
 
-export default Banks
+export default RepairCosts

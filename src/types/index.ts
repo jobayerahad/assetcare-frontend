@@ -1,4 +1,6 @@
 export * from './auth'
+export * from './asset'
 export * from './repair-cost'
+export * from './vendor'
 export * from './user'
 export * from './utilities'

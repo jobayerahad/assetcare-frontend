@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { AiOutlineDashboard as DashboardIcon } from 'react-icons/ai'
+import { AiOutlineDashboard as DashboardIcon, AiOutlineShop as VendorIcon } from 'react-icons/ai'
 import { MdAttachMoney as CostIcon } from 'react-icons/md'
 
 type MenuItem = {
@@ -18,6 +18,8 @@ type MenuItems = MenuItem | MenuWithLinks
 
 export const menuItems = [
   { link: '/', label: 'Dashboard', icon: <DashboardIcon /> },
+  // { link: '/assets', label: 'Assets', icon: <AssetIcon /> },
+  { link: '/vendors', label: 'Vendors', icon: <VendorIcon /> },
   { link: '/repair-costs', label: 'Repair Costs', icon: <CostIcon /> }
 ]
 

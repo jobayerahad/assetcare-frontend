@@ -3,5 +3,7 @@ export type TRepairCost = {
   name: string
   partName: string
   repairCost: number
+  vendor: string
+  year: Date
   remarks: string
 }

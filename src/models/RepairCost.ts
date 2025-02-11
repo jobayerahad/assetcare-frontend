@@ -14,8 +14,18 @@ const RepairCostSchema: Schema = new Schema(
       required: true
     },
 
-    repairCost: {
+    cost: {
       type: Number,
+      required: true
+    },
+
+    vendor: {
+      type: String,
+      required: true
+    },
+
+    year: {
+      type: Date,
       required: true
     },
 

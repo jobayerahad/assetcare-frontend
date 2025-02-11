@@ -2,16 +2,18 @@
 
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { ActionIcon, Alert, Container, Group, Paper, Table, TextInput, Tooltip } from '@mantine/core'
-import { openModal } from '@mantine/modals'
+import { ActionIcon, Alert, Container, Group, Menu, Paper, Table, Text, TextInput, Tooltip } from '@mantine/core'
+import { openConfirmModal, openModal } from '@mantine/modals'
 import { useDebouncedValue } from '@mantine/hooks'
-import { IoMdAdd as AddIcon } from 'react-icons/io'
+import { IoMdAdd as AddIcon, IoIosMore as MoreIcon } from 'react-icons/io'
 import { FiSearch as SearchIcon } from 'react-icons/fi'
 
 import AddAsset from './add'
+import EditAsset from './edit'
 import TitleBar from '@components/common/title-bar'
 import TableNav from '@components/common/table-nav'
 import useNavigation from '@hooks/useNavigation'
+import { deleteAsset } from '@actions/assets'
 import { TAsset, TPaginatedRes } from '@types'
 
 type Props = {
@@ -31,11 +33,27 @@ const AssetList = ({ data: { data, paginationInfo } }: Props) => {
   const handlePageChange = (val: number) => navigate({ page: val.toString() })
   const handleLimitChange = (val: string | null) => navigate({ limit: val! })
 
-  const addCostHandler = () =>
+  const addAssetHandler = () =>
     openModal({
       title: 'Add New Asset',
       children: <AddAsset />,
       centered: true
+    })
+
+  const editAssetHandler = (asset: TAsset) =>
+    openModal({
+      title: 'Edit Asset',
+      children: <EditAsset initialData={asset} />,
+      centered: true
+    })
+
+  const deleteHandler = (id: string) =>
+    openConfirmModal({
+      title: 'Delete asset',
+      children: <Text size="sm">Do you really want to delete this asset?</Text>,
+      centered: true,
+      labels: { confirm: 'Delete', cancel: 'Cancel' },
+      onConfirm: async () => await deleteAsset(id)
     })
 
   useEffect(() => {
@@ -56,8 +74,8 @@ const AssetList = ({ data: { data, paginationInfo } }: Props) => {
             miw={300}
           />
 
-          <Tooltip label="Add New Repair Cost" withArrow position="bottom">
-            <ActionIcon onClick={addCostHandler}>
+          <Tooltip label="Add New Asset" withArrow position="bottom">
+            <ActionIcon onClick={addAssetHandler}>
               <AddIcon />
             </ActionIcon>
           </Tooltip>
@@ -71,20 +89,31 @@ const AssetList = ({ data: { data, paginationInfo } }: Props) => {
               <Table.Thead style={{ userSelect: 'none' }}>
                 <Table.Tr>
                   <Table.Th>Name</Table.Th>
-                  {/* <Table.Th></Table.Th> */}
+                  <Table.Th>Remarks</Table.Th>
+                  <Table.Th></Table.Th>
                 </Table.Tr>
               </Table.Thead>
 
               <Table.Tbody>
-                {data.map(({ name }, index) => (
+                {data.map((datum, index) => (
                   <Table.Tr key={index}>
-                    <Table.Td>{name}</Table.Td>
+                    <Table.Td>{datum.name}</Table.Td>
+                    <Table.Td>{datum.remarks}</Table.Td>
 
-                    {/* <Table.Td>
-                      <ActionIcon component={Link} href={`/repair-costs/${_id}`} size="sm" variant="subtle">
-                        <ViewIcon />
-                      </ActionIcon>
-                    </Table.Td> */}
+                    <Table.Td>
+                      <Menu withArrow>
+                        <Menu.Target>
+                          <ActionIcon variant="subtle" size="sm">
+                            <MoreIcon />
+                          </ActionIcon>
+                        </Menu.Target>
+
+                        <Menu.Dropdown>
+                          <Menu.Item onClick={() => editAssetHandler(datum)}>Edit</Menu.Item>
+                          <Menu.Item onClick={() => deleteHandler(datum._id)}>Delete</Menu.Item>
+                        </Menu.Dropdown>
+                      </Menu>
+                    </Table.Td>
                   </Table.Tr>
                 ))}
               </Table.Tbody>

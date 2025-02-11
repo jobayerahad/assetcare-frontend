@@ -19,7 +19,7 @@ export const getRepairCosts = async (page = 1, limit = 10, search: string) => {
   if (search) query.$or = [{ name: { $regex: search } }, { partName: { $regex: search } }]
 
   const [data, totalRecords] = await Promise.all([
-    RepairCost.find(query).sort({ organization: 1 }).skip(skip).limit(limit).lean(),
+    RepairCost.find(query).sort({ name: 1 }).skip(skip).limit(limit).lean(),
     RepairCost.countDocuments(query)
   ])
 

@@ -19,7 +19,7 @@ export const getVendors = async (page = 1, limit = 10, search: string) => {
   if (search) query.$or = [{ name: { $regex: search } }]
 
   const [data, totalRecords] = await Promise.all([
-    Vendor.find(query).sort({ organization: 1 }).skip(skip).limit(limit).lean(),
+    Vendor.find(query).sort({ name: 1 }).skip(skip).limit(limit).lean(),
     Vendor.countDocuments(query)
   ])
 
@@ -29,6 +29,16 @@ export const getVendors = async (page = 1, limit = 10, search: string) => {
   }))
 
   return paginateRes(updatedData, totalRecords, page, limit)
+}
+
+export const getVendorMenu = async () => {
+  connectToDB()
+
+  const data = await Vendor.find().select('-_id name').sort({ name: 1 })
+
+  const list = data.map((datum) => datum.name)
+
+  return list
 }
 
 export const addVendor = async (formData: Partial<TVendor>): Promise<ActionResponse> => {

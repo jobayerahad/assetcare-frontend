@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { ActionIcon, Alert, Container, Group, Paper, Table, TextInput, Tooltip } from '@mantine/core'
+import { ActionIcon, Alert, Container, Group, NumberFormatter, Paper, Table, TextInput, Tooltip } from '@mantine/core'
 import { openModal } from '@mantine/modals'
 import { useDebouncedValue } from '@mantine/hooks'
 import { IoMdAdd as AddIcon } from 'react-icons/io'
@@ -70,19 +70,33 @@ const RepairCostList = ({ data: { data, paginationInfo } }: Props) => {
             <Table verticalSpacing={10} horizontalSpacing="sm" striped highlightOnHover>
               <Table.Thead style={{ userSelect: 'none' }}>
                 <Table.Tr>
+                  <Table.Th>Sl.</Table.Th>
                   <Table.Th>Name</Table.Th>
                   <Table.Th>Part</Table.Th>
                   <Table.Th>Cost</Table.Th>
+                  <Table.Th>Vendor</Table.Th>
+                  <Table.Th>Year</Table.Th>
                   {/* <Table.Th></Table.Th> */}
                 </Table.Tr>
               </Table.Thead>
 
               <Table.Tbody>
-                {data.map(({ name, partName, repairCost }, index) => (
+                {data.map((datum, index) => (
                   <Table.Tr key={index}>
-                    <Table.Td>{name}</Table.Td>
-                    <Table.Td>{partName}</Table.Td>
-                    <Table.Td>{repairCost}</Table.Td>
+                    <Table.Td>{index + 1}</Table.Td>
+                    <Table.Td>{datum.name}</Table.Td>
+                    <Table.Td>{datum.partName}</Table.Td>
+                    <Table.Td>
+                      <NumberFormatter
+                        suffix=" ৳"
+                        value={datum.cost}
+                        thousandSeparator
+                        thousandsGroupStyle="lakh"
+                        fixedDecimalScale
+                      />
+                    </Table.Td>
+                    <Table.Td>{datum.vendor}</Table.Td>
+                    <Table.Td>{datum.year.toLocaleString('en-BD', { year: 'numeric' })}</Table.Td>
 
                     {/* <Table.Td>
                       <ActionIcon component={Link} href={`/repair-costs/${_id}`} size="sm" variant="subtle">

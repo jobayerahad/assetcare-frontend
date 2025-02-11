@@ -56,7 +56,7 @@ const VendorList = ({ data: { data, paginationInfo } }: Props) => {
             miw={300}
           />
 
-          <Tooltip label="Add New Repair Cost" withArrow position="bottom">
+          <Tooltip label="Add New Vendor" withArrow position="bottom">
             <ActionIcon onClick={addCostHandler}>
               <AddIcon />
             </ActionIcon>

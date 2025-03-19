@@ -5,13 +5,10 @@ import { revalidatePath } from 'next/cache'
 
 import Vendor from '@models/Vendor'
 import { StatusMsg } from '@config/constants'
-import { connectToDB } from '@utils/database'
 import { paginateRes } from '@utils/helpers'
 import { ActionResponse, TVendor } from '@types'
 
 export const getVendors = async (page = 1, limit = 10, search: string) => {
-  connectToDB()
-
   const skip = (page - 1) * limit
 
   const query: FilterQuery<typeof Vendor> = {}
@@ -32,8 +29,6 @@ export const getVendors = async (page = 1, limit = 10, search: string) => {
 }
 
 export const getVendorMenu = async () => {
-  connectToDB()
-
   const data = await Vendor.find().select('-_id name').sort({ name: 1 })
 
   const list = data.map((datum) => datum.name)

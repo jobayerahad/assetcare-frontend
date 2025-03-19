@@ -5,13 +5,10 @@ import { revalidatePath } from 'next/cache'
 
 import RepairCost from '@models/RepairCost'
 import { StatusMsg } from '@config/constants'
-import { connectToDB } from '@utils/database'
 import { paginateRes } from '@utils/helpers'
 import { ActionResponse, TRepairCost } from '@types'
 
 export const getRepairCosts = async (page = 1, limit = 10, search: string) => {
-  connectToDB()
-
   const skip = (page - 1) * limit
 
   const query: FilterQuery<typeof RepairCost> = {}

@@ -5,13 +5,10 @@ import { revalidatePath } from 'next/cache'
 
 import Asset from '@models/Asset'
 import { StatusMsg } from '@config/constants'
-import { connectToDB } from '@utils/database'
 import { paginateRes } from '@utils/helpers'
 import { ActionResponse, TAsset } from '@types'
 
 export const getAssets = async (page = 1, limit = 10, search: string) => {
-  connectToDB()
-
   const skip = (page - 1) * limit
 
   const query: FilterQuery<typeof Asset> = {}
@@ -32,8 +29,6 @@ export const getAssets = async (page = 1, limit = 10, search: string) => {
 }
 
 export const getAssetMenu = async () => {
-  connectToDB()
-
   const data = await Asset.find().select('-_id name').sort({ name: 1 })
 
   const list = data.map((datum) => datum.name)

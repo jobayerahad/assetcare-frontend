@@ -26,12 +26,12 @@ const lora = Lora({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://fixlogix.sbacbank.com'),
+  metadataBase: new URL('https://assetcare.sbacbank.com'),
   title: {
-    default: 'FixLogix',
-    template: '%s - FixLogix'
+    default: 'AssetCare',
+    template: '%s - AssetCare'
   },
-  description: 'FixLogix implies a smart, streamlined, and logical system for managing repair tracking and reporting',
+  description: 'AssetCare implies a smart, streamlined, and logical system for managing repair tracking and reporting',
   authors: [{ name: 'Jobayer Al Mahmud Ahad', url: 'https://www.jobayerahad.com' }],
   publisher: 'SBAC Bank PLC'
 }

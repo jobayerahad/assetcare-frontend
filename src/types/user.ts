@@ -1,5 +1,4 @@
 export type Employee = {
-  id: string
   empId: number
   name: string
   email: string
@@ -12,4 +11,9 @@ export type Employee = {
     code: string
     name: string
   }
+}
+
+export type SessionUser = Employee & {
+  id: string
+  token: string
 }

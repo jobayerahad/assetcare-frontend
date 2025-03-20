@@ -2,8 +2,8 @@ import { NextAuthOptions } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 
 import { login } from '@actions/auth'
-import { Employee } from '@types'
 import { getProfile } from '@actions/profile'
+import { SessionUser } from '@types'
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -34,29 +34,19 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     jwt: async ({ token, user }) => {
-      if (user) {
-        token.user = user
-        token.lastActivity = Date.now() // Store the timestamp of the last activity
-      } else if (token.lastActivity) {
-        const now = Date.now()
-        const elapsed = (now - (token.lastActivity as number)) / 1000 // Time elapsed in seconds
-        const timeout = 30 * 60 // 30 minutes in seconds
-        if (elapsed > timeout) throw new Error('Session expired due to inactivity')
-      }
-      token.lastActivity = Date.now() // Update activity timestamp
+      if (user) token.user = user
       return token
     },
 
     session: async ({ session, token }) => {
-      if (token?.user) session.user = token.user as Employee
+      if (token?.user) session.user = token.user as SessionUser
       return session
     }
   },
 
   session: {
-    strategy: 'jwt',
-    maxAge: 4 * 60 * 60, // 4 hours
-    updateAge: 30 * 60 // Extend session every 30 minutes
+    maxAge: 60 * 60, // 1 hour
+    updateAge: 24 * 60 * 60 // Optional: Update token if it’s older than 24 hours
   },
 
   jwt: {

@@ -1,5 +1,6 @@
 export * from './auth'
 export * from './asset'
+export * from './category'
 export * from './repair-cost'
 export * from './vendor'
 export * from './user'

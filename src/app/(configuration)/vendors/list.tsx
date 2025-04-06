@@ -2,23 +2,41 @@
 
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { ActionIcon, Alert, Container, Group, Paper, Table, TextInput, Tooltip } from '@mantine/core'
-import { openModal } from '@mantine/modals'
+import {
+  ActionIcon,
+  Alert,
+  Box,
+  Container,
+  Group,
+  Menu,
+  Paper,
+  SimpleGrid,
+  Table,
+  Text,
+  TextInput,
+  Title,
+  Tooltip
+} from '@mantine/core'
+import { openConfirmModal, openModal } from '@mantine/modals'
+import { showNotification } from '@mantine/notifications'
 import { useDebouncedValue } from '@mantine/hooks'
-import { IoMdAdd as AddIcon } from 'react-icons/io'
+import { IoMdAdd as AddIcon, IoIosMore as MoreIcon } from 'react-icons/io'
 import { FiSearch as SearchIcon } from 'react-icons/fi'
+import { MdDeleteOutline as DeleteIcon, MdEdit as EditIcon } from 'react-icons/md'
 
-import AddVendor from './add'
+import VendorForm from './add'
+import { deleteVendor } from '@actions/vendors'
 import TitleBar from '@components/common/title-bar'
 import TableNav from '@components/common/table-nav'
 import useNavigation from '@hooks/useNavigation'
-import { TVendor, TPaginatedRes } from '@types'
+import { getMessage } from '@utils/notification'
+import { TVendor, PaginationResponse } from '@types'
 
 type Props = {
-  data: TPaginatedRes<TVendor>
+  data: PaginationResponse<TVendor>
 }
 
-const VendorList = ({ data: { data, paginationInfo } }: Props) => {
+const VendorList = ({ data: { data, meta } }: Props) => {
   const searchParams = useSearchParams()!
   const { navigate } = useNavigation()
 
@@ -26,15 +44,43 @@ const VendorList = ({ data: { data, paginationInfo } }: Props) => {
   const [search] = useDebouncedValue(interSearch, 400)
 
   const page = Number(searchParams.get('page')) || 1
-  const limit = searchParams.get('limit') || '10'
+  const limit = searchParams.get('per_page') || '10'
 
   const handlePageChange = (val: number) => navigate({ page: val.toString() })
-  const handleLimitChange = (val: string | null) => navigate({ limit: val! })
+  const handleLimitChange = (val: string | null) => navigate({ per_page: val! })
 
-  const addCostHandler = () =>
+  const addHandler = () =>
     openModal({
       title: 'Add New Vendor',
-      children: <AddVendor />,
+      children: <VendorForm />,
+      size: 'lg',
+      closeOnClickOutside: false,
+      centered: true
+    })
+
+  const editHandler = (id: number, data: Partial<TVendor>) =>
+    openModal({
+      title: 'Edit Vendor',
+      children: <VendorForm vendorId={id} initialValues={data} />,
+      size: 'lg',
+      closeOnClickOutside: false,
+      centered: true
+    })
+
+  const deleteHandler = (id: number) =>
+    openConfirmModal({
+      title: 'Delete This Vendor?',
+      children: (
+        <Text size="sm">
+          Are you sure you want to delete this vendor? This action is destructive and can't reverse.
+        </Text>
+      ),
+      labels: { confirm: 'Delete', cancel: 'Cancel' },
+      confirmProps: { color: 'red', variant: 'filled' },
+      onConfirm: async () => {
+        const res = await deleteVendor(id)
+        showNotification(getMessage(res))
+      },
       centered: true
     })
 
@@ -53,43 +99,51 @@ const VendorList = ({ data: { data, paginationInfo } }: Props) => {
             value={interSearch}
             onChange={(event) => setInterSearch(event.currentTarget.value)}
             leftSection={<SearchIcon />}
-            miw={300}
+            miw={250}
+            size="xs"
           />
 
-          <Tooltip label="Add New Vendor" withArrow position="bottom">
-            <ActionIcon onClick={addCostHandler}>
+          <Tooltip label="Add Vendor" withArrow position="bottom">
+            <ActionIcon onClick={addHandler}>
               <AddIcon />
             </ActionIcon>
           </Tooltip>
         </Group>
       </Group>
 
-      {paginationInfo.totalRecords > 0 ? (
+      {meta.total > 0 ? (
         <>
-          <Paper shadow="xs" mb="xs">
-            <Table verticalSpacing={10} horizontalSpacing="sm" striped highlightOnHover>
-              <Table.Thead style={{ userSelect: 'none' }}>
-                <Table.Tr>
-                  <Table.Th>Name</Table.Th>
-                  {/* <Table.Th></Table.Th> */}
-                </Table.Tr>
-              </Table.Thead>
+          <SimpleGrid cols={2} mb="xs">
+            {data.map(({ name, description, id }, index) => (
+              <Paper shadow="xs" p="sm" pos="relative" key={index}>
+                <Title order={4} mb={4}>
+                  {name}
+                </Title>
 
-              <Table.Tbody>
-                {data.map(({ name }, index) => (
-                  <Table.Tr key={index}>
-                    <Table.Td>{name}</Table.Td>
+                <Text size="sm">Description: {description ?? 'N/A'}</Text>
 
-                    {/* <Table.Td>
-                      <ActionIcon component={Link} href={`/repair-costs/${_id}`} size="sm" variant="subtle">
-                        <ViewIcon />
+                <Box pos="absolute" top={10} right={10}>
+                  <Menu shadow="md" withArrow>
+                    <Menu.Target>
+                      <ActionIcon variant="outline" size="sm">
+                        <MoreIcon />
                       </ActionIcon>
-                    </Table.Td> */}
-                  </Table.Tr>
-                ))}
-              </Table.Tbody>
-            </Table>
-          </Paper>
+                    </Menu.Target>
+
+                    <Menu.Dropdown>
+                      <Menu.Item leftSection={<EditIcon />} onClick={() => editHandler(id, { name, description })}>
+                        Edit
+                      </Menu.Item>
+
+                      <Menu.Item color="red" leftSection={<DeleteIcon />} onClick={() => deleteHandler(id)}>
+                        Delete
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                </Box>
+              </Paper>
+            ))}
+          </SimpleGrid>
 
           <TableNav
             listName="vendors"
@@ -97,8 +151,8 @@ const VendorList = ({ data: { data, paginationInfo } }: Props) => {
             limitHandler={handleLimitChange}
             page={page}
             pageHandler={handlePageChange}
-            totalPages={paginationInfo.totalPages}
-            totalRecords={paginationInfo.totalRecords}
+            totalPages={meta.last_page}
+            totalRecords={meta.total}
           />
         </>
       ) : (

@@ -1,50 +1,71 @@
 'use server'
 
-import { FilterQuery } from 'mongoose'
 import { revalidatePath } from 'next/cache'
+import { notFound } from 'next/navigation'
 
-import Vendor from '@models/Vendor'
+import api from '@utils/api'
 import { StatusMsg } from '@config/constants'
-import { paginateRes } from '@utils/helpers'
-import { ActionResponse, TVendor } from '@types'
+import { ActionResponse, SearchParams, TVendor } from '@types'
 
-export const getVendors = async (page = 1, limit = 10, search: string) => {
-  const skip = (page - 1) * limit
+export const getVendors = async (params: SearchParams) => {
+  try {
+    const apiObj = await api()
+    const { data } = await apiObj.get('/vendors', { params })
 
-  const query: FilterQuery<typeof Vendor> = {}
-
-  if (search) query.$or = [{ name: { $regex: search } }]
-
-  const [data, totalRecords] = await Promise.all([
-    Vendor.find(query).sort({ name: 1 }).skip(skip).limit(limit).lean(),
-    Vendor.countDocuments(query)
-  ])
-
-  const updatedData = data.map((datum) => ({
-    ...datum,
-    _id: datum._id.toString()
-  }))
-
-  return paginateRes(updatedData, totalRecords, page, limit)
-}
-
-export const getVendorMenu = async () => {
-  const data = await Vendor.find().select('-_id name').sort({ name: 1 })
-
-  const list = data.map((datum) => datum.name)
-
-  return list
+    return data
+  } catch (error) {
+    notFound()
+  }
 }
 
 export const addVendor = async (formData: Partial<TVendor>): Promise<ActionResponse> => {
   try {
-    await Vendor.create(formData)
+    const apiObj = await api()
+    const { data } = await apiObj.post('/vendors', formData)
 
     revalidatePath('/vendors')
 
     return {
       status: StatusMsg.SUCCESS,
-      message: 'A new vendor added'
+      message: data.message
+    }
+  } catch (error) {
+    return {
+      status: StatusMsg.BAD_REQUEST,
+      message: error instanceof Error ? error.message : 'An unknown exception occured'
+    }
+  }
+}
+
+export const updateVendor = async (id: number, formData: Partial<TVendor>): Promise<ActionResponse> => {
+  try {
+    const apiObj = await api()
+    const { data } = await apiObj.put(`/vendors/${id}`, formData)
+
+    revalidatePath('/vendors')
+
+    return {
+      status: StatusMsg.SUCCESS,
+      message: data.message
+    }
+  } catch (error) {
+    return {
+      status: StatusMsg.BAD_REQUEST,
+      message: error instanceof Error ? error.message : 'An unknown exception occured'
+    }
+  }
+}
+
+export const deleteVendor = async (id: number): Promise<ActionResponse> => {
+  try {
+    const apiObj = await api()
+    await apiObj.delete(`/vendors/${id}`)
+
+    revalidatePath('/vendors')
+
+    return {
+      status: StatusMsg.SUCCESS,
+      message: 'Vendor deleted successfully'
     }
   } catch (error) {
     return {

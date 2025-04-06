@@ -2,13 +2,10 @@ import type { Metadata } from 'next'
 
 import VendorList from './list'
 import { getVendors } from '@actions/vendors'
+import { SearchParams } from '@types'
 
 type Props = {
-  searchParams: Promise<{
-    page: number
-    limit: number
-    search: string
-  }>
+  searchParams: Promise<SearchParams>
 }
 
 export const metadata: Metadata = {
@@ -16,8 +13,8 @@ export const metadata: Metadata = {
 }
 
 const Vendors = async (props: Props) => {
-  const { limit, page, search } = await props.searchParams
-  const data = await getVendors(page, limit, search)
+  const searchParams = await props.searchParams
+  const data = await getVendors(searchParams)
 
   return <VendorList data={data} />
 }

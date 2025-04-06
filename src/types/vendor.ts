@@ -1,5 +1,5 @@
 export type TVendor = {
-  _id: string
+  id: number
   name: string
-  remarks: string
+  description: string
 }

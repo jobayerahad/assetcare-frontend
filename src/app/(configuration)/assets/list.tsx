@@ -14,13 +14,13 @@ import TitleBar from '@components/common/title-bar'
 import TableNav from '@components/common/table-nav'
 import useNavigation from '@hooks/useNavigation'
 import { deleteAsset } from '@actions/assets'
-import { TAsset, TPaginatedRes } from '@types'
+import { TAsset, PaginationResponse } from '@types'
 
 type Props = {
-  data: TPaginatedRes<TAsset>
+  data: PaginationResponse<TAsset>
 }
 
-const AssetList = ({ data: { data, paginationInfo } }: Props) => {
+const AssetList = ({ data: { data, meta } }: Props) => {
   const searchParams = useSearchParams()!
   const { navigate } = useNavigation()
 
@@ -82,7 +82,7 @@ const AssetList = ({ data: { data, paginationInfo } }: Props) => {
         </Group>
       </Group>
 
-      {paginationInfo.totalRecords > 0 ? (
+      {meta.total > 0 ? (
         <>
           <Paper shadow="xs" mb="xs">
             <Table verticalSpacing={10} horizontalSpacing="sm" striped highlightOnHover>
@@ -126,8 +126,8 @@ const AssetList = ({ data: { data, paginationInfo } }: Props) => {
             limitHandler={handleLimitChange}
             page={page}
             pageHandler={handlePageChange}
-            totalPages={paginationInfo.totalPages}
-            totalRecords={paginationInfo.totalRecords}
+            totalPages={meta.last_page}
+            totalRecords={meta.total}
           />
         </>
       ) : (

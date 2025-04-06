@@ -17,11 +17,12 @@ export const authOptions: NextAuthOptions = {
         try {
           if (!credentials?.empId || !credentials?.password) throw new Error('Employee ID and password are required')
 
-          await login(credentials.empId, credentials.password)
+          const token = await login(credentials.empId, credentials.password)
           const profile = await getProfile(+credentials.empId)
 
           return {
             ...profile,
+            token,
             id: credentials.empId
           }
         } catch (error: any) {

@@ -16,27 +16,25 @@ export type StatusMessageProps = {
 }
 
 export type PaginationResponse<T> = {
-  current_page: number
+  success: boolean
+  message: string
   data: T[]
-  first_page_url: string
-  from: number | null
-  last_page: number
-  last_page_url: string
-  links: {
-    url: string | null
-    label: string
-    active: boolean
-  }[]
-  next_page_url: string | null
-  path: string
-  per_page: number
-  prev_page_url: string | null
-  to: number | null
-  total: number
+  meta: {
+    current_page: number
+    per_page: number
+    total: number
+    last_page: number
+  }
 }
 
 export type ActionResponse = {
   status: StatusMsg
   message: string
   data?: any
+}
+
+export type SearchParams = {
+  per_page: number
+  page: number
+  search: string
 }

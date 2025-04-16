@@ -2,7 +2,6 @@ import { NextAuthOptions } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 
 import { login } from '@actions/auth'
-import { getProfile } from '@actions/profile'
 import { SessionUser } from '@types'
 
 export const authOptions: NextAuthOptions = {
@@ -17,12 +16,10 @@ export const authOptions: NextAuthOptions = {
         try {
           if (!credentials?.empId || !credentials?.password) throw new Error('Employee ID and password are required')
 
-          const token = await login(credentials.empId, credentials.password)
-          const profile = await getProfile(+credentials.empId)
+          const data = await login(credentials.empId, credentials.password)
 
           return {
-            ...profile,
-            token,
+            ...data,
             id: credentials.empId
           }
         } catch (error: any) {

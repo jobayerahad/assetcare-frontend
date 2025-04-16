@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 
 import CategoryList from './list'
 import { getCategories } from '@actions/categories'
-import { TCategoryParams } from '@types'
+import { SearchParams } from '@types'
 
 type Props = {
-  searchParams: Promise<TCategoryParams>
+  searchParams: Promise<SearchParams>
 }
 
 export const metadata: Metadata = {
@@ -16,8 +15,6 @@ export const metadata: Metadata = {
 const Categories = async (props: Props) => {
   const params = await props.searchParams
   const data = await getCategories(params)
-
-  if (!data) notFound()
 
   return <CategoryList data={data} />
 }

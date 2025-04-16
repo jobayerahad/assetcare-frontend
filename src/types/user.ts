@@ -15,5 +15,5 @@ export type Employee = {
 
 export type SessionUser = Employee & {
   id: string
-  token: string
+  access_token: string
 }

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { useSession } from 'next-auth/react'
-import { AppShell, Burger, em, Text } from '@mantine/core'
+import { AppShell, Burger, em } from '@mantine/core'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 
 import AppHeader from './Header'
@@ -41,12 +41,7 @@ const StructureShell = ({ children }: { children: ReactNode }) => {
         <AppNavbar />
       </AppShell.Navbar>
 
-      <AppShell.Main>
-        <Text pos="fixed" bottom="1rem" right="1rem" c="dimmed" size="sm" style={{ zIndex: 100 }}>
-          Note: This app is currently in preview mode. You can enjoy paperless requisition system soon.
-        </Text>
-        {children}
-      </AppShell.Main>
+      <AppShell.Main>{children}</AppShell.Main>
     </AppShell>
   )
 }

@@ -11,7 +11,6 @@ import {
   Menu,
   Paper,
   SimpleGrid,
-  Table,
   Text,
   TextInput,
   Title,
@@ -24,11 +23,11 @@ import { IoMdAdd as AddIcon, IoIosMore as MoreIcon } from 'react-icons/io'
 import { FiSearch as SearchIcon } from 'react-icons/fi'
 import { MdDeleteOutline as DeleteIcon, MdEdit as EditIcon } from 'react-icons/md'
 
-import VendorForm from './add'
-import { deleteVendor } from '@actions/vendors'
+import VendorForm from './form'
 import TitleBar from '@components/common/title-bar'
 import TableNav from '@components/common/table-nav'
 import useNavigation from '@hooks/useNavigation'
+import { deleteVendor } from '@actions/vendors'
 import { getMessage } from '@utils/notification'
 import { TVendor, PaginationResponse } from '@types'
 

@@ -1,7 +1,7 @@
 export type TCategory = {
-  id: string
+  id: number
   name: string
-  remarks: string
+  description: string
 }
 
 export type TCategoryParams = {

@@ -9,7 +9,7 @@ import { TbReport as ReportIcon } from 'react-icons/tb'
 type MenuItem = {
   link: string
   label: string
-  icon: ReactNode
+  icon?: ReactNode
 }
 
 type MenuWithLinks = {

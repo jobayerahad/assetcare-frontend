@@ -18,6 +18,17 @@ export const getCategories = async (params: SearchParams) => {
   }
 }
 
+export const getAllCategory = async () => {
+  try {
+    const apiObj = await api()
+    const { data } = await apiObj.get('/categories/all')
+
+    return data
+  } catch (error) {
+    notFound()
+  }
+}
+
 export const addCategory = async (formData: Partial<TCategory>): Promise<ActionResponse> => {
   try {
     const apiObj = await api()

@@ -23,7 +23,7 @@ type MenuItems = MenuItem | MenuWithLinks
 export const menuItems = [
   { link: '/', label: 'Dashboard', icon: <DashboardIcon /> },
   {
-    label: 'Asset Configuration',
+    label: 'Configuration',
     icon: <ConfigIcon />,
     links: [
       { link: '/categories', label: 'Categories', icon: <CategoryIcon /> },

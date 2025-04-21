@@ -1,52 +1,40 @@
 import { ActionIcon, Divider, Flex, Group, Loader, Paper, Table, Text, Title, Tooltip } from '@mantine/core'
-import { openConfirmModal, openModal } from '@mantine/modals'
+import { openConfirmModal } from '@mantine/modals'
 import { showNotification } from '@mantine/notifications'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { MdDeleteOutline as DeleteIcon, MdEdit as EditIcon } from 'react-icons/md'
+import { MdDeleteOutline as DeleteIcon } from 'react-icons/md'
 
-import ProductForm from './form'
-import { deleteProduct, getProducts } from '@actions/products'
+import { getComponents, deleteComponent } from '@actions/components'
 import { getMessage } from '@utils/notification'
-import { TCategory, TProduct, TProductForm } from '@types'
+import { TProduct } from '@types'
 
 type Props = {
-  categoryId: string
-  title: string
-  categories: TCategory[]
+  productId: string
 }
 
-const ProductList = ({ categoryId, title, categories }: Props) => {
+const ComponentList = ({ productId }: Props) => {
   const queryClient = useQueryClient()
 
   const { isLoading, isFetching, data } = useQuery({
-    queryKey: ['products', categoryId],
-    queryFn: () => getProducts(categoryId),
+    queryKey: ['products', productId],
+    queryFn: () => getComponents(productId),
     refetchOnWindowFocus: false
   })
 
-  const editHandler = (productId: number, data: TProductForm) =>
-    openModal({
-      title: 'Edit Product',
-      children: <ProductForm productId={productId} initialValues={data} categories={categories} />,
-      size: 'lg',
-      closeOnClickOutside: false,
-      centered: true
-    })
-
-  const deleteHandler = (productId: number) =>
+  const deleteHandler = (componentId: number) =>
     openConfirmModal({
-      title: 'Delete This Product?',
+      title: 'Delete This Component?',
       children: (
         <Text size="sm">
-          Are you sure you want to delete this product? This action is destructive and can't reverse.
+          Are you sure you want to delete this component? This action is destructive and can't reverse.
         </Text>
       ),
       labels: { confirm: 'Delete', cancel: 'Cancel' },
       confirmProps: { color: 'red', variant: 'filled' },
       onConfirm: async () => {
-        const res = await deleteProduct(+categoryId, productId)
+        const res = await deleteComponent(+productId, componentId)
         showNotification(getMessage(res))
-        queryClient.invalidateQueries({ queryKey: ['products', categoryId] })
+        queryClient.invalidateQueries({ queryKey: ['products', productId] })
       },
       centered: true
     })
@@ -55,7 +43,7 @@ const ProductList = ({ categoryId, title, categories }: Props) => {
     <>
       <Divider variant="dashed" my="xs" />
 
-      <Paper shadow="xs" p="md">
+      <Paper shadow="xs" p="sm">
         {isLoading || isFetching ? (
           <Flex direction="column" align="center" gap="xs">
             <Loader />
@@ -65,7 +53,7 @@ const ProductList = ({ categoryId, title, categories }: Props) => {
         ) : (
           <>
             <Title order={4} size="md" mb="xs">
-              Existing Products | {title}
+              Existing Components
             </Title>
 
             {data?.length > 0 ? (
@@ -79,7 +67,7 @@ const ProductList = ({ categoryId, title, categories }: Props) => {
 
                       <Table.Td w={100}>
                         <Group gap={8}>
-                          <Tooltip label="Edit" withArrow position="bottom">
+                          {/* <Tooltip label="Edit" withArrow position="bottom">
                             <ActionIcon
                               variant="light"
                               color="blue"
@@ -88,7 +76,7 @@ const ProductList = ({ categoryId, title, categories }: Props) => {
                             >
                               <EditIcon />
                             </ActionIcon>
-                          </Tooltip>
+                          </Tooltip> */}
 
                           <Tooltip label="Delete" withArrow position="bottom">
                             <ActionIcon variant="light" color="red" size="sm" onClick={() => deleteHandler(id)}>
@@ -102,7 +90,7 @@ const ProductList = ({ categoryId, title, categories }: Props) => {
                 </Table.Tbody>
               </Table>
             ) : (
-              <Text size="sm">No product found</Text>
+              <Text size="sm">No component found</Text>
             )}
           </>
         )}
@@ -111,4 +99,4 @@ const ProductList = ({ categoryId, title, categories }: Props) => {
   )
 }
 
-export default ProductList
+export default ComponentList

@@ -9,15 +9,16 @@ import { useQueryClient } from '@tanstack/react-query'
 import { FaSave as SaveIcon } from 'react-icons/fa'
 import { MdUpdate as UpdateIcon } from 'react-icons/md'
 
+import ProductsMenu from './products'
 import ProductList from './list'
 import TitleBar from '@components/common/title-bar'
-import { addProduct, updateProduct } from '@actions/products'
+import { addComponent, updateComponent } from '@actions/components'
 import { StatusMsg } from '@config/constants'
 import { getMessage } from '@utils/notification'
-import { TCategory, TProductForm } from '@types'
+import { TCategory, TComponentForm } from '@types'
 
 type Props = {
-  initialValues?: TProductForm
+  initialValues?: TComponentForm
   productId?: number
   categories: TCategory[]
 }
@@ -26,18 +27,19 @@ const ProductForm = ({ initialValues, productId, categories }: Props) => {
   const queryClient = useQueryClient()
   const [isLoading, startTransition] = useTransition()
 
-  const { onSubmit, getInputProps, values, reset } = useForm<TProductForm>({
+  const { onSubmit, getInputProps, values, reset } = useForm<TComponentForm>({
     initialValues: {
       name: '',
       description: '',
       category: null,
+      product: null,
       ...initialValues
     }
   })
 
-  const submitHandler = (formData: TProductForm) =>
+  const submitHandler = (formData: TComponentForm) =>
     startTransition(async () => {
-      const res = productId ? await updateProduct(productId, formData) : await addProduct(formData)
+      const res = productId ? await updateComponent(productId, formData) : await addComponent(formData)
 
       showNotification(getMessage(res))
 
@@ -63,7 +65,15 @@ const ProductForm = ({ initialValues, productId, categories }: Props) => {
         {...getInputProps('category')}
       />
 
-      <TextInput label="Product Name" placeholder="Enter product name" {...getInputProps('name')} mb="xs" required />
+      <ProductsMenu categoryId={values.category!} getInputProps={getInputProps} />
+
+      <TextInput
+        label="Component Name"
+        placeholder="Enter component name"
+        mb="xs"
+        required
+        {...getInputProps('name')}
+      />
 
       <Textarea
         label="Description"
@@ -83,19 +93,13 @@ const ProductForm = ({ initialValues, productId, categories }: Props) => {
   else
     return (
       <Container size="sm">
-        <TitleBar title="Add Product" url="/" />
+        <TitleBar title="Add Component" url="/" />
 
         <Paper shadow="xs" p="sm" mt="xs">
           {form}
         </Paper>
 
-        {values.category && (
-          <ProductList
-            categoryId={values.category}
-            title={categories.find(({ id }) => id.toString() === values.category)?.name ?? ''}
-            categories={categories}
-          />
-        )}
+        {values.product && <ProductList productId={values.product} />}
       </Container>
     )
 }

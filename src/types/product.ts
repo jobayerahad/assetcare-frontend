@@ -10,3 +10,10 @@ export type TProduct = {
   description: string
   category_id: number
 }
+
+export type TComponentForm = {
+  name: string
+  description: string
+  category: string | null
+  product: string | null
+}

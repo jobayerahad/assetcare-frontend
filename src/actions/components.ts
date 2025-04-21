@@ -4,12 +4,12 @@ import { revalidatePath } from 'next/cache'
 
 import api from '@utils/api'
 import { StatusMsg } from '@config/constants'
-import { ActionResponse, TProductForm } from '@types'
+import { ActionResponse, TComponentForm } from '@types'
 
-export const getProducts = async (catId: string) => {
+export const getComponents = async (catId: string) => {
   try {
     const apiObj = await api()
-    const { data } = await apiObj.get(`/categories/${catId}/products`)
+    const { data } = await apiObj.get(`/products/${catId}/components`)
 
     return data.data
   } catch (error) {
@@ -17,14 +17,14 @@ export const getProducts = async (catId: string) => {
   }
 }
 
-export const addProduct = async (formData: TProductForm): Promise<ActionResponse> => {
+export const addComponent = async (formData: TComponentForm): Promise<ActionResponse> => {
   try {
     const apiObj = await api()
-    const { category, ...rest } = formData
+    const { category, product, ...rest } = formData
 
-    const { data } = await apiObj.post(`/categories/${category}/products`, rest)
+    const { data } = await apiObj.post(`/products/${product}/components`, rest)
 
-    revalidatePath('/products')
+    revalidatePath('/components')
 
     return {
       status: StatusMsg.SUCCESS,
@@ -38,14 +38,14 @@ export const addProduct = async (formData: TProductForm): Promise<ActionResponse
   }
 }
 
-export const updateProduct = async (productId: number, formData: TProductForm): Promise<ActionResponse> => {
+export const updateComponent = async (componentId: number, formData: TComponentForm): Promise<ActionResponse> => {
   try {
     const apiObj = await api()
     const { category, ...rest } = formData
 
-    const { data } = await apiObj.put(`/categories/${category}/products/${productId}`, rest)
+    const { data } = await apiObj.put(`/products/${category}/components/${componentId}`, rest)
 
-    revalidatePath('/products')
+    revalidatePath('/components')
 
     return {
       status: StatusMsg.SUCCESS,
@@ -59,16 +59,16 @@ export const updateProduct = async (productId: number, formData: TProductForm): 
   }
 }
 
-export const deleteProduct = async (categoryId: number, productId: number): Promise<ActionResponse> => {
+export const deleteComponent = async (productId: number, componentId: number): Promise<ActionResponse> => {
   try {
     const apiObj = await api()
-    await apiObj.delete(`/categories/${categoryId}/products/${productId}`)
+    await apiObj.delete(`/products/${productId}/components/${componentId}`)
 
-    revalidatePath('/products')
+    revalidatePath('/components')
 
     return {
       status: StatusMsg.SUCCESS,
-      message: 'Product deleted successfully'
+      message: 'Component deleted successfully'
     }
   } catch (error) {
     return {

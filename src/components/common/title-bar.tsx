@@ -15,7 +15,7 @@ const TitleBar = ({ title, url }: Props) => (
       </ActionIcon>
     </Tooltip>
 
-    <Title order={4} ta="center">
+    <Title order={4} ta="center" size="xl">
       {title}
     </Title>
   </Group>

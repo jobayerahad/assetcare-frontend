@@ -1,6 +1,7 @@
 export * from './auth'
 export * from './category'
 export * from './product'
+export * from './service-approval'
 export * from './vendor'
 export * from './user'
 export * from './utilities'

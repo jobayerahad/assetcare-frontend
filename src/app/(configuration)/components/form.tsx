@@ -23,7 +23,7 @@ type Props = {
   categories: TCategory[]
 }
 
-const ProductForm = ({ initialValues, productId, categories }: Props) => {
+const ComponentForm = ({ initialValues, productId, categories }: Props) => {
   const queryClient = useQueryClient()
   const [isLoading, startTransition] = useTransition()
 
@@ -104,4 +104,4 @@ const ProductForm = ({ initialValues, productId, categories }: Props) => {
     )
 }
 
-export default ProductForm
+export default ComponentForm

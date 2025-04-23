@@ -36,5 +36,6 @@ export type ActionResponse = {
 export type SearchParams = {
   per_page: number
   page: number
+  include: string
   search: string
 }

@@ -5,12 +5,12 @@ import { notFound } from 'next/navigation'
 
 import api from '@utils/api'
 import { StatusMsg } from '@config/constants'
-import { ActionResponse, SearchParams, TVendor } from '@types'
+import { TServiceApprovalForm, ActionResponse, SearchParams } from '@types'
 
-export const getVendors = async (params: SearchParams) => {
+export const getServiceApprovals = async (params: SearchParams) => {
   try {
     const apiObj = await api()
-    const { data } = await apiObj.get('/vendors', { params })
+    const { data } = await apiObj.get('/service-approvals', { params })
 
     return data
   } catch (error) {
@@ -18,23 +18,12 @@ export const getVendors = async (params: SearchParams) => {
   }
 }
 
-export const getAllVendors = async () => {
+export const addServiceApproval = async (formData: Partial<TServiceApprovalForm>): Promise<ActionResponse> => {
   try {
     const apiObj = await api()
-    const { data } = await apiObj.get('/vendors/all')
+    const { data } = await apiObj.post('/service-approvals', formData)
 
-    return data
-  } catch (error) {
-    notFound()
-  }
-}
-
-export const addVendor = async (formData: Partial<TVendor>): Promise<ActionResponse> => {
-  try {
-    const apiObj = await api()
-    const { data } = await apiObj.post('/vendors', formData)
-
-    revalidatePath('/vendors')
+    revalidatePath('/service-approvals')
 
     return {
       status: StatusMsg.SUCCESS,
@@ -48,12 +37,15 @@ export const addVendor = async (formData: Partial<TVendor>): Promise<ActionRespo
   }
 }
 
-export const updateVendor = async (id: number, formData: Partial<TVendor>): Promise<ActionResponse> => {
+export const updateServiceApproval = async (
+  id: number,
+  formData: Partial<TServiceApprovalForm>
+): Promise<ActionResponse> => {
   try {
     const apiObj = await api()
-    const { data } = await apiObj.put(`/vendors/${id}`, formData)
+    const { data } = await apiObj.put(`/service-approvals/${id}`, formData)
 
-    revalidatePath('/vendors')
+    revalidatePath('/service-approvals')
 
     return {
       status: StatusMsg.SUCCESS,
@@ -67,16 +59,16 @@ export const updateVendor = async (id: number, formData: Partial<TVendor>): Prom
   }
 }
 
-export const deleteVendor = async (id: number): Promise<ActionResponse> => {
+export const deleteServiceApproval = async (id: number): Promise<ActionResponse> => {
   try {
     const apiObj = await api()
-    await apiObj.delete(`/vendors/${id}`)
+    await apiObj.delete(`/service-approvals/${id}`)
 
-    revalidatePath('/vendors')
+    revalidatePath('/service-approvals')
 
     return {
       status: StatusMsg.SUCCESS,
-      message: 'Vendor deleted successfully'
+      message: 'Service Approval deleted successfully'
     }
   } catch (error) {
     return {

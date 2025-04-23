@@ -112,7 +112,7 @@ const VendorList = ({ data: { data, meta } }: Props) => {
 
       {meta.total > 0 ? (
         <>
-          <SimpleGrid cols={2} mb="xs">
+          <SimpleGrid cols={2} spacing="xs" mb="xs">
             {data.map(({ name, description, id }, index) => (
               <Paper shadow="xs" p="sm" pos="relative" key={index}>
                 <Title order={4} mb={4}>

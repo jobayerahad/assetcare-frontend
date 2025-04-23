@@ -16,7 +16,7 @@ const ComponentList = ({ productId }: Props) => {
   const queryClient = useQueryClient()
 
   const { isLoading, isFetching, data } = useQuery({
-    queryKey: ['products', productId],
+    queryKey: ['components', productId],
     queryFn: () => getComponents(productId),
     refetchOnWindowFocus: false
   })

@@ -3,6 +3,7 @@ import { AiOutlineDashboard as DashboardIcon, AiOutlineShop as VendorIcon } from
 import { BiCabinet as AssetIcon, BiCategory as CategoryIcon, BiSolidComponent as ComponentIcon } from 'react-icons/bi'
 import { MdAttachMoney as CostIcon } from 'react-icons/md'
 import { GrConfigure as ConfigIcon } from 'react-icons/gr'
+import { GoLog as LogIcon } from 'react-icons/go'
 import { LuSettings as OperationIcon } from 'react-icons/lu'
 import { TbReport as ReportIcon } from 'react-icons/tb'
 
@@ -52,7 +53,8 @@ export const menuItems = [
       { link: '/expired-items', label: 'Expired Items' },
       { link: '/individual-repair-history', label: 'Individual Repair History' }
     ]
-  }
+  },
+  { link: '/logs', label: 'Logs', icon: <LogIcon /> }
 ]
 
 export const isActiveLink = (path: string, link: string = '') => {

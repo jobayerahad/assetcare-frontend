@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import type { Metadata } from 'next'
 import { MantineProvider, ColorSchemeScript } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
-import { Work_Sans, Lora } from 'next/font/google'
+import { Work_Sans, Lora, Fira_Code } from 'next/font/google'
 
 import '@mantine/core/styles.css'
 import '@mantine/charts/styles.css'
@@ -25,6 +25,12 @@ const lora = Lora({
   display: 'swap'
 })
 
+const fira_code = Fira_Code({
+  subsets: ['latin'],
+  variable: '--font-fira-code',
+  display: 'swap'
+})
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://assetcare.sbacbank.com'),
   title: {
@@ -37,7 +43,7 @@ export const metadata: Metadata = {
 }
 
 const RootLayout = ({ children }: WrapperProps) => (
-  <html lang="en" className={clsx(work_sans.variable, lora.variable)} suppressHydrationWarning>
+  <html lang="en" className={clsx(work_sans.variable, lora.variable, fira_code.variable)} suppressHydrationWarning>
     <head>
       <ColorSchemeScript defaultColorScheme="auto" />
     </head>

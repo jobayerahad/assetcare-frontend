@@ -6,6 +6,11 @@ a {
   text-decoration: none;
 }
 
+pre,
+code {
+  font-family: var(--font-fira-code);
+}
+
 ::-webkit-scrollbar {
   width: 5px;
 }

@@ -34,12 +34,20 @@ export const theme = createTheme({
   },
 
   spacing: {
-    xs: '0.9rem',
-    sm: '1.2rem',
-    md: '1.5rem',
-    lg: '2rem',
-    xl: '2.5rem'
+    xs: '0.8rem',
+    sm: '1rem',
+    md: '1.2rem',
+    lg: '1.6rem',
+    xl: '2rem'
   },
+
+  // fontSizes: {
+  //   xs: '0.7rem',
+  //   sm: '0.8rem',
+  //   md: '0.9rem',
+  //   lg: '1.1rem',
+  //   xl: '1.3rem'
+  // },
 
   components: {
     Anchor: {

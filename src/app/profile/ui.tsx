@@ -3,6 +3,7 @@
 import { Avatar, Container, Grid, Group, Paper, Table, Title } from '@mantine/core'
 import { AiOutlineUser as ProfileIcon } from 'react-icons/ai'
 
+import { capWords } from '@utils/helpers'
 import { Employee } from '@types'
 
 type Props = {
@@ -28,7 +29,8 @@ const ProfileUI = ({ profile }: Props) => (
               { title: 'Branch', value: `${profile.branch?.name} (${profile.branch?.code})` },
               { title: profile.branch?.code === '0001' ? 'Division' : 'Department', value: profile.department },
               { title: 'Email', value: profile.email },
-              { title: 'Cell Number', value: profile.cellNo }
+              { title: 'Cell Number', value: profile.cellNo },
+              { title: 'Role', value: capWords(profile.role) }
             ].map(({ title, value }, index) => (
               <Table.Tr key={index}>
                 <Table.Th>{title}</Table.Th>

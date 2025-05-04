@@ -1,11 +1,11 @@
 import { ReactNode } from 'react'
 import { AiOutlineDashboard as DashboardIcon, AiOutlineShop as VendorIcon } from 'react-icons/ai'
-import { BiCabinet as AssetIcon, BiCategory as CategoryIcon, BiSolidComponent as ComponentIcon } from 'react-icons/bi'
+import { BiCabinet as ProductIcon, BiCategory as CategoryIcon, BiSolidComponent as ComponentIcon } from 'react-icons/bi'
 import { MdAttachMoney as CostIcon } from 'react-icons/md'
 import { GrConfigure as ConfigIcon } from 'react-icons/gr'
 import { GoLog as LogIcon } from 'react-icons/go'
 import { LuSettings as OperationIcon } from 'react-icons/lu'
-import { TbReport as ReportIcon } from 'react-icons/tb'
+import { TbReport as ReportIcon, TbBuildingBurjAlArab as AssetIcon } from 'react-icons/tb'
 
 type MenuItem = {
   link: string
@@ -28,9 +28,10 @@ export const menuItems = [
     icon: <ConfigIcon />,
     links: [
       { link: '/categories', label: 'Categories', icon: <CategoryIcon /> },
-      { link: '/products', label: 'Products', icon: <AssetIcon /> },
+      { link: '/products', label: 'Products', icon: <ProductIcon /> },
       { link: '/components', label: 'Components', icon: <ComponentIcon /> },
       { link: '/vendors', label: 'Vendors', icon: <VendorIcon /> },
+      { link: '/assets', label: 'Assets', icon: <AssetIcon /> },
       { link: '/service-approvals', label: 'Service Approvals', icon: <CostIcon /> }
     ]
   },

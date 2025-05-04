@@ -23,7 +23,7 @@ export const getAllCategory = async () => {
     const apiObj = await api()
     const { data } = await apiObj.get('/categories/all')
 
-    return data
+    return data.data
   } catch (error) {
     notFound()
   }

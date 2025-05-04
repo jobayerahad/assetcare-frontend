@@ -11,6 +11,7 @@ export type Employee = {
     code: string
     name: string
   }
+  role: 'user' | 'operator' | 'admin'
 }
 
 export type SessionUser = Employee & {

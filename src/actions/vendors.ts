@@ -23,7 +23,7 @@ export const getAllVendors = async () => {
     const apiObj = await api()
     const { data } = await apiObj.get('/vendors/all')
 
-    return data
+    return data.data
   } catch (error) {
     notFound()
   }

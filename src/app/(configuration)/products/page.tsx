@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const Products = async () => {
   const categories = await getAllCategory()
 
-  return <ProductForm categories={categories.data} />
+  return <ProductForm categories={categories} />
 }
 
 export default Products

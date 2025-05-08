@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const Components = async () => {
   const categories = await getAllCategory()
 
-  return <ComponentForm categories={categories.data} />
+  return <ComponentForm categories={categories} />
 }
 
 export default Components

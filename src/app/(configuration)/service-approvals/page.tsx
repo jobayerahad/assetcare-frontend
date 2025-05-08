@@ -23,7 +23,7 @@ const ServiceApprovals = async (props: Props) => {
     getAllVendors()
   ])
 
-  return <ServiceApprovalUI data={data} categories={categories.data} vendors={vendors.data} />
+  return <ServiceApprovalUI data={data} categories={categories} vendors={vendors} />
 }
 
 export default ServiceApprovals

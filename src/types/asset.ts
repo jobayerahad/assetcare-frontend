@@ -8,10 +8,24 @@ export type TAssetForm = {
   product_id: string | null
   model: string
   serial_number: string
-  current_location_type: 'Branch' | 'Division' | 'Vendor'
+  current_location_type: 'branch' | 'division' | 'vendor' | string
   current_location_id: string | null
   remarks: string
   status: 'active' | 'under_repair' | 'scrapped'
+}
+
+export type TAssetTransferForm = {
+  asset_id: string | null
+  from_location_type: 'branch' | 'division' | 'vendor'
+  from_location_id: string | null
+  to_location_type: 'branch' | 'division' | 'vendor'
+  to_location_id: string | null
+  transfer_type: 'sent_for_repair' | 'returned_after_repair'
+  transfer_date: Date | string | null
+  received_by: string
+  category: string | null
+  product: string | null
+  remarks: string
 }
 
 export type TAsset = {
@@ -22,7 +36,7 @@ export type TAsset = {
   model: string
   serial_number: string
   status: 'active' | 'under_repair' | 'scrapped'
-  current_location_type: 'Branch' | 'Division' | 'Vendor'
+  current_location_type: 'branch' | 'division' | 'vendor'
   current_location_id: number
   remarks: string
   branch: TBranch

@@ -33,6 +33,7 @@ const AssetForm = ({ initialValues, assetId, branches, divisions, categories }: 
       division_id: null,
       product_id: null,
       category: null,
+      brand: '',
       model: '',
       serial_number: '',
       status: 'active',
@@ -107,7 +108,11 @@ const AssetForm = ({ initialValues, assetId, branches, divisions, categories }: 
         {values.category && <ProductsMenu categoryId={values.category!} getInputProps={getInputProps} />}
       </SimpleGrid>
 
-      <TextInput label="Model" placeholder="Enter model" mb="xs" withAsterisk {...getInputProps('model')} />
+      <SimpleGrid cols={2} mb="xs">
+        <TextInput label="Brand" placeholder="Enter brand" withAsterisk {...getInputProps('brand')} />
+
+        <TextInput label="Model" placeholder="Enter model" withAsterisk {...getInputProps('model')} />
+      </SimpleGrid>
 
       <TextInput
         label="Serial Number"

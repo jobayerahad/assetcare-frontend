@@ -31,8 +31,8 @@ export const menuItems = [
       { link: '/products', label: 'Products', icon: <ProductIcon /> },
       { link: '/components', label: 'Components', icon: <ComponentIcon /> },
       { link: '/vendors', label: 'Vendors', icon: <VendorIcon /> },
-      { link: '/assets', label: 'Assets', icon: <AssetIcon /> },
-      { link: '/service-approvals', label: 'Service Approvals', icon: <CostIcon /> }
+      { link: '/service-approvals', label: 'Approval Price', icon: <CostIcon /> },
+      { link: '/assets', label: 'Assets', icon: <AssetIcon /> }
     ]
   },
   {

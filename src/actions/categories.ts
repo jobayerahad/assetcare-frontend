@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 
 import api from '@utils/api'
 import { StatusMsg } from '@config/constants'
+import { handleError } from '@utils/helpers'
 import { TCategory, ActionResponse, SearchParams } from '@types'
 
 export const getCategories = async (params: SearchParams) => {
@@ -41,10 +42,7 @@ export const addCategory = async (formData: Partial<TCategory>): Promise<ActionR
       message: data.message
     }
   } catch (error) {
-    return {
-      status: StatusMsg.BAD_REQUEST,
-      message: error instanceof Error ? error.message : 'An unknown exception occured'
-    }
+    return handleError(error)
   }
 }
 
@@ -60,10 +58,7 @@ export const updateCategory = async (id: number, formData: Partial<TCategory>): 
       message: data.message
     }
   } catch (error) {
-    return {
-      status: StatusMsg.BAD_REQUEST,
-      message: error instanceof Error ? error.message : 'An unknown exception occured'
-    }
+    return handleError(error)
   }
 }
 
@@ -79,9 +74,6 @@ export const deleteCategory = async (id: number): Promise<ActionResponse> => {
       message: 'Category deleted successfully'
     }
   } catch (error) {
-    return {
-      status: StatusMsg.BAD_REQUEST,
-      message: error instanceof Error ? error.message : 'An unknown exception occured'
-    }
+    return handleError(error)
   }
 }

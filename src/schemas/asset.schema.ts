@@ -16,6 +16,8 @@ export const assetFormSchema = yup.object().shape({
 
   product_id: yup.string().nullable().required('Product is required'),
 
+  brand: yup.string().required('Model is required'),
+
   model: yup.string().required('Model is required'),
 
   serial_number: yup.string().required('Serial number is required'),

@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 
 import api from '@utils/api'
 import { StatusMsg } from '@config/constants'
+import { handleError } from '@utils/helpers'
 import { ActionResponse, TComponentForm } from '@types'
 
 export const getComponents = async (catId: string) => {
@@ -31,10 +32,7 @@ export const addComponent = async (formData: TComponentForm): Promise<ActionResp
       message: data.message
     }
   } catch (error) {
-    return {
-      status: StatusMsg.BAD_REQUEST,
-      message: error instanceof Error ? error.message : 'An unknown exception occured'
-    }
+    return handleError(error)
   }
 }
 
@@ -52,10 +50,7 @@ export const updateComponent = async (componentId: number, formData: TComponentF
       message: data.message
     }
   } catch (error) {
-    return {
-      status: StatusMsg.BAD_REQUEST,
-      message: error instanceof Error ? error.message : 'An unknown exception occured'
-    }
+    return handleError(error)
   }
 }
 
@@ -71,9 +66,6 @@ export const deleteComponent = async (productId: number, componentId: number): P
       message: 'Component deleted successfully'
     }
   } catch (error) {
-    return {
-      status: StatusMsg.BAD_REQUEST,
-      message: error instanceof Error ? error.message : 'An unknown exception occured'
-    }
+    return handleError(error)
   }
 }

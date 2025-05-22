@@ -1,33 +1,32 @@
 'use client'
 
+import Link from 'next/link'
 import pluralize from 'pluralize'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { ActionIcon, Alert, Container, Group, Menu, Paper, Table, Text, TextInput, Tooltip } from '@mantine/core'
-import { openConfirmModal, openModal } from '@mantine/modals'
-import { showNotification } from '@mantine/notifications'
+import { ActionIcon, Alert, Badge, Container, Group, Paper, Table, TextInput, Tooltip } from '@mantine/core'
+import { openModal } from '@mantine/modals'
 import { useDebouncedValue } from '@mantine/hooks'
-import { IoMdAdd as AddIcon, IoIosMore as MoreIcon } from 'react-icons/io'
+import { FaEye as ViewIcon } from 'react-icons/fa'
 import { FiSearch as SearchIcon } from 'react-icons/fi'
-import { MdDeleteOutline as DeleteIcon, MdEdit as EditIcon } from 'react-icons/md'
 
-import AssetForm from './form'
+import ScrapAsset from './scrap'
+import ToVendor from './to-vendor'
 import TitleBar from '@components/common/title-bar'
 import TableNav from '@components/common/table-nav'
 import useNavigation from '@hooks/useNavigation'
-import { deleteAsset } from '@actions/assets'
-import { getMessage } from '@utils/notification'
-import { PaginationResponse, TAsset, TAssetForm, TBranch, TCategory, TDivision, TVendor } from '@types'
+import { getAssetStatus } from '@utils/helpers'
+import { PaginationResponse, TAsset, TAssetMaintenance, TBranch, TCategory, TDivision, TVendor } from '@types'
 
 type Props = {
-  data: PaginationResponse<TAsset>
+  data: PaginationResponse<TAssetMaintenance>
   branches: TBranch[]
   divisions: TDivision[]
   vendors: TVendor[]
   categories: TCategory[]
 }
 
-const AssetList = ({ data: { data, meta }, branches, divisions, vendors, categories }: Props) => {
+const MaintenanceList = ({ data: { data, meta }, branches, divisions, vendors, categories }: Props) => {
   const searchParams = useSearchParams()!
   const { navigate } = useNavigation()
 
@@ -40,51 +39,29 @@ const AssetList = ({ data: { data, meta }, branches, divisions, vendors, categor
   const handlePageChange = (val: number) => navigate({ page: val.toString() })
   const handleLimitChange = (val: string | null) => navigate({ per_page: val! })
 
-  const addHandler = () =>
-    openModal({
-      title: 'Add New Asset',
-      children: <AssetForm branches={branches} divisions={divisions} categories={categories} />,
-      size: 'lg',
-      closeOnClickOutside: false,
-      centered: true
-    })
-
-  const editHandler = (id: number, data: TAssetForm) =>
-    openModal({
-      title: 'Edit Asset',
-      children: (
-        <AssetForm
-          assetId={id}
-          initialValues={data}
-          branches={branches}
-          divisions={divisions}
-          categories={categories}
-        />
-      ),
-      size: 'lg',
-      closeOnClickOutside: false,
-      centered: true
-    })
-
   const scrapHandler = (id: number) =>
-    openConfirmModal({
+    openModal({
       title: 'Scrap Asset',
-      children: <Text size="sm">Are you sure you want to scrap this asset?</Text>,
-      labels: { confirm: 'Delete', cancel: 'Cancel' },
-      confirmProps: { color: 'red', variant: 'filled' },
-      onConfirm: async () => {
-        const res = await deleteAsset(id)
-        showNotification(getMessage(res))
-      },
+      children: <ScrapAsset id={id} />,
+      size: 'lg',
+      centered: true
+    })
+
+  const toVendorHandler = (data: TAsset) =>
+    openModal({
+      title: 'Send to Vendor',
+      children: <ToVendor data={data} vendors={vendors} />,
+      size: 'lg',
       centered: true
     })
 
   useEffect(() => {
-    navigate({ search, page: '1' })
+    const currentSearch = searchParams.get('search') || ''
+    if (search !== currentSearch) navigate({ search, page: '1' })
   }, [search])
 
   return (
-    <Container>
+    <Container size="lg">
       <Group justify="space-between" mb="xs">
         <TitleBar title="Asset Maintenance" url="/" />
 
@@ -96,12 +73,6 @@ const AssetList = ({ data: { data, meta }, branches, divisions, vendors, categor
             leftSection={<SearchIcon />}
             miw={300}
           />
-
-          <Tooltip label="Add Asset" withArrow position="bottom">
-            <ActionIcon onClick={addHandler}>
-              <AddIcon />
-            </ActionIcon>
-          </Tooltip>
         </Group>
       </Group>
 
@@ -112,11 +83,13 @@ const AssetList = ({ data: { data, meta }, branches, divisions, vendors, categor
               <Table.Thead style={{ userSelect: 'none' }}>
                 <Table.Tr>
                   <Table.Th>Sl.</Table.Th>
-                  <Table.Th>Category</Table.Th>
                   <Table.Th>Asset</Table.Th>
                   <Table.Th>Branch</Table.Th>
+                  <Table.Th>Brand</Table.Th>
                   <Table.Th>Model</Table.Th>
                   <Table.Th>Serial No.</Table.Th>
+                  <Table.Th>On Repair</Table.Th>
+                  <Table.Th>Status</Table.Th>
                   <Table.Th></Table.Th>
                 </Table.Tr>
               </Table.Thead>
@@ -125,46 +98,24 @@ const AssetList = ({ data: { data, meta }, branches, divisions, vendors, categor
                 {data.map((item, index) => (
                   <Table.Tr key={index}>
                     <Table.Td>{index + 1}</Table.Td>
-                    <Table.Td>{item.product?.category?.name}</Table.Td>
-                    <Table.Td>{item.product?.name}</Table.Td>
-                    <Table.Td>{item.branch.code === '0001' ? item.division.name : item.branch.name}</Table.Td>
-                    <Table.Td>{item.model}</Table.Td>
-                    <Table.Td>{item.serial_number}</Table.Td>
+                    <Table.Td>{item.asset?.product?.name}</Table.Td>
+                    <Table.Td>{item.branch.code === '0001' ? item.division?.name : item.branch.name}</Table.Td>
+                    <Table.Td>{item.asset.brand}</Table.Td>
+                    <Table.Td>{item.asset.model}</Table.Td>
+                    <Table.Td>{item.asset.serial_number}</Table.Td>
+                    <Table.Td>{new Date(item.created_at).toLocaleString('en-BD', { dateStyle: 'medium' })}</Table.Td>
+                    <Table.Td>
+                      <Badge variant="light" color={getAssetStatus(item.status).color}>
+                        {getAssetStatus(item.status).label}
+                      </Badge>
+                    </Table.Td>
 
                     <Table.Td>
-                      <Menu shadow="md" withArrow>
-                        <Menu.Target>
-                          <ActionIcon variant="subtle" size="sm">
-                            <MoreIcon />
-                          </ActionIcon>
-                        </Menu.Target>
-
-                        <Menu.Dropdown>
-                          <Menu.Item
-                            leftSection={<EditIcon />}
-                            onClick={() =>
-                              editHandler(item.id, {
-                                branch_id: item.branch_id.toString(),
-                                division_id: item.division_id.toString(),
-                                product_id: item.product_id.toString(),
-                                category: item.product?.category?.id.toString(),
-                                model: item.model,
-                                serial_number: item.serial_number,
-                                status: item.status,
-                                current_location_type: item.current_location_type,
-                                current_location_id: item.current_location_id.toString(),
-                                remarks: item.remarks
-                              })
-                            }
-                          >
-                            Deliver
-                          </Menu.Item>
-
-                          <Menu.Item leftSection={<DeleteIcon />} onClick={() => deleteHandler(item.id)}>
-                            Deliver
-                          </Menu.Item>
-                        </Menu.Dropdown>
-                      </Menu>
+                      <Tooltip label="View Details" position="bottom" withArrow>
+                        <ActionIcon variant="subtle" size="xs" component={Link} href={`/maintenance/${item.id}`}>
+                          <ViewIcon />
+                        </ActionIcon>
+                      </Tooltip>
                     </Table.Td>
                   </Table.Tr>
                 ))}
@@ -183,10 +134,12 @@ const AssetList = ({ data: { data, meta }, branches, divisions, vendors, categor
           />
         </>
       ) : (
-        <Alert title="No assets found">Once any asset come for maintenance, the list will appear here.</Alert>
+        <Alert title="No Assets in Maintenance">
+          As soon as an asset is added for maintenance, it will be displayed here as they become available
+        </Alert>
       )}
     </Container>
   )
 }
 
-export default AssetList
+export default MaintenanceList

@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 
 import api from '@utils/api'
 import { StatusMsg } from '@config/constants'
+import { handleError } from '@utils/helpers'
 import { TServiceApprovalForm, ActionResponse, SearchParams } from '@types'
 
 export const getServiceApprovals = async (params: SearchParams) => {
@@ -30,10 +31,7 @@ export const addServiceApproval = async (formData: Partial<TServiceApprovalForm>
       message: data.message
     }
   } catch (error) {
-    return {
-      status: StatusMsg.BAD_REQUEST,
-      message: error instanceof Error ? error.message : 'An unknown exception occured'
-    }
+    return handleError(error)
   }
 }
 
@@ -52,10 +50,7 @@ export const updateServiceApproval = async (
       message: data.message
     }
   } catch (error) {
-    return {
-      status: StatusMsg.BAD_REQUEST,
-      message: error instanceof Error ? error.message : 'An unknown exception occured'
-    }
+    return handleError(error)
   }
 }
 
@@ -71,9 +66,6 @@ export const deleteServiceApproval = async (id: number): Promise<ActionResponse>
       message: 'Service Approval deleted successfully'
     }
   } catch (error) {
-    return {
-      status: StatusMsg.BAD_REQUEST,
-      message: error instanceof Error ? error.message : 'An unknown exception occured'
-    }
+    return handleError(error)
   }
 }

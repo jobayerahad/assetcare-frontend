@@ -1,5 +1,6 @@
 'use server'
 
+import { AxiosError } from 'axios'
 import { revalidatePath } from 'next/cache'
 import { notFound } from 'next/navigation'
 
@@ -43,7 +44,7 @@ export const addVendor = async (formData: Partial<TVendor>): Promise<ActionRespo
   } catch (error) {
     return {
       status: StatusMsg.BAD_REQUEST,
-      message: error instanceof Error ? error.message : 'An unknown exception occured'
+      message: error instanceof AxiosError ? error.response?.data.message : 'An unknown exception occured'
     }
   }
 }
@@ -62,7 +63,7 @@ export const updateVendor = async (id: number, formData: Partial<TVendor>): Prom
   } catch (error) {
     return {
       status: StatusMsg.BAD_REQUEST,
-      message: error instanceof Error ? error.message : 'An unknown exception occured'
+      message: error instanceof AxiosError ? error.response?.data.message : 'An unknown exception occured'
     }
   }
 }
@@ -81,7 +82,7 @@ export const deleteVendor = async (id: number): Promise<ActionResponse> => {
   } catch (error) {
     return {
       status: StatusMsg.BAD_REQUEST,
-      message: error instanceof Error ? error.message : 'An unknown exception occured'
+      message: error instanceof AxiosError ? error.response?.data.message : 'An unknown exception occured'
     }
   }
 }

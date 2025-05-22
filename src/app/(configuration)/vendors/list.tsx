@@ -84,7 +84,8 @@ const VendorList = ({ data: { data, meta } }: Props) => {
     })
 
   useEffect(() => {
-    navigate({ search, page: '1' })
+    const currentSearch = searchParams.get('search') || ''
+    if (search !== currentSearch) navigate({ search, page: '1' })
   }, [search])
 
   return (

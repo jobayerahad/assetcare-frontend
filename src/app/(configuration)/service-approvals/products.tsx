@@ -29,7 +29,6 @@ const ProductsMenu = ({ categoryId, getInputProps }: Props) => {
           : []
       }
       searchable
-      mb="xs"
       required
       disabled={isLoading || isFetching}
       {...getInputProps('product')}

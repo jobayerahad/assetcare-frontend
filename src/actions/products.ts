@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 
 import api from '@utils/api'
 import { StatusMsg } from '@config/constants'
+import { handleError } from '@utils/helpers'
 import { ActionResponse, TProductForm } from '@types'
 
 export const getProducts = async (catId: string) => {
@@ -31,10 +32,7 @@ export const addProduct = async (formData: TProductForm): Promise<ActionResponse
       message: data.message
     }
   } catch (error) {
-    return {
-      status: StatusMsg.BAD_REQUEST,
-      message: error instanceof Error ? error.message : 'An unknown exception occured'
-    }
+    return handleError(error)
   }
 }
 
@@ -52,10 +50,7 @@ export const updateProduct = async (productId: number, formData: TProductForm): 
       message: data.message
     }
   } catch (error) {
-    return {
-      status: StatusMsg.BAD_REQUEST,
-      message: error instanceof Error ? error.message : 'An unknown exception occured'
-    }
+    return handleError(error)
   }
 }
 
@@ -71,9 +66,6 @@ export const deleteProduct = async (categoryId: number, productId: number): Prom
       message: 'Product deleted successfully'
     }
   } catch (error) {
-    return {
-      status: StatusMsg.BAD_REQUEST,
-      message: error instanceof Error ? error.message : 'An unknown exception occured'
-    }
+    return handleError(error)
   }
 }

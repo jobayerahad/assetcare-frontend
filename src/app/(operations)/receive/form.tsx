@@ -57,7 +57,10 @@ const AssetReceiveForm = ({ categories, user, branches, divisions, vendors }: Pr
         transfer_type: formData.from_location_type === 'vendor' ? 'returned_after_repair' : 'sent_for_repair'
       }
 
-      const res = await transferAsset(val)
+      const res = await transferAsset({
+        ...val,
+        on_repair: ['branch', 'division'].includes(formData.from_location_type) ? true : false
+      })
 
       showNotification(getMessage(res))
       if (res.status === StatusMsg.SUCCESS) reset()

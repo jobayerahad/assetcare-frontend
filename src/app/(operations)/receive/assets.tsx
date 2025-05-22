@@ -22,9 +22,9 @@ const AssetsMenu = ({ productId, getInputProps }: Props) => {
       placeholder="Select asset"
       data={
         data && data?.length > 0
-          ? data.map(({ id, serial_number, model }: TAsset) => ({
+          ? data.map(({ id, serial_number, model, brand }: TAsset) => ({
               value: id.toString(),
-              label: `Model: ${model}, Sl: ${serial_number}`
+              label: `Brand: ${brand}, Model: ${model}, Sl: ${serial_number}`
             }))
           : []
       }

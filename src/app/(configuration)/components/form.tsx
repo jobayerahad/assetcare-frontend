@@ -44,7 +44,7 @@ const ComponentForm = ({ initialValues, productId, categories }: Props) => {
       showNotification(getMessage(res))
 
       if (res.status === StatusMsg.SUCCESS) {
-        productId ? closeAllModals() : reset()
+        // productId ? closeAllModals() : reset()
         queryClient.invalidateQueries({ queryKey: ['products', formData.category] })
       }
     })

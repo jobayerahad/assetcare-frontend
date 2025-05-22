@@ -1,5 +1,6 @@
 'use client'
 
+import pluralize from 'pluralize'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { ActionIcon, Alert, Container, Group, Menu, Paper, Table, Text, TextInput, Tooltip } from '@mantine/core'
@@ -22,11 +23,10 @@ type Props = {
   data: PaginationResponse<TAsset>
   branches: TBranch[]
   divisions: TDivision[]
-  vendors: TVendor[]
   categories: TCategory[]
 }
 
-const AssetList = ({ data: { data, meta }, branches, divisions, vendors, categories }: Props) => {
+const AssetList = ({ data: { data, meta }, branches, divisions, categories }: Props) => {
   const searchParams = useSearchParams()!
   const { navigate } = useNavigation()
 
@@ -81,11 +81,12 @@ const AssetList = ({ data: { data, meta }, branches, divisions, vendors, categor
     })
 
   useEffect(() => {
-    navigate({ search, page: '1' })
+    const currentSearch = searchParams.get('search') || ''
+    if (search !== currentSearch) navigate({ search, page: '1' })
   }, [search])
 
   return (
-    <Container>
+    <Container size="lg">
       <Group justify="space-between" mb="xs">
         <TitleBar title="Asset List" url="/" />
 
@@ -113,8 +114,9 @@ const AssetList = ({ data: { data, meta }, branches, divisions, vendors, categor
               <Table.Thead style={{ userSelect: 'none' }}>
                 <Table.Tr>
                   <Table.Th>Sl.</Table.Th>
-                  <Table.Th>Category</Table.Th>
+                  <Table.Th>Branch/Division</Table.Th>
                   <Table.Th>Product</Table.Th>
+                  <Table.Th>Brand</Table.Th>
                   <Table.Th>Model</Table.Th>
                   <Table.Th>Serial No.</Table.Th>
                   <Table.Th></Table.Th>
@@ -125,8 +127,9 @@ const AssetList = ({ data: { data, meta }, branches, divisions, vendors, categor
                 {data.map((item, index) => (
                   <Table.Tr key={index}>
                     <Table.Td>{index + 1}</Table.Td>
-                    <Table.Td>{item.product?.category?.name}</Table.Td>
+                    <Table.Td>{item.branch.code === '0001' ? item.division.name : item.branch.name}</Table.Td>
                     <Table.Td>{item.product?.name}</Table.Td>
+                    <Table.Td>{item.brand}</Table.Td>
                     <Table.Td>{item.model}</Table.Td>
                     <Table.Td>{item.serial_number}</Table.Td>
 
@@ -147,6 +150,7 @@ const AssetList = ({ data: { data, meta }, branches, divisions, vendors, categor
                                 division_id: item.division_id.toString(),
                                 product_id: item.product_id.toString(),
                                 category: item.product?.category?.id.toString(),
+                                brand: item.brand,
                                 model: item.model,
                                 serial_number: item.serial_number,
                                 status: item.status,
@@ -172,7 +176,7 @@ const AssetList = ({ data: { data, meta }, branches, divisions, vendors, categor
           </Paper>
 
           <TableNav
-            listName="categories"
+            listName={pluralize('asset', meta.total)}
             limit={limit}
             limitHandler={handleLimitChange}
             page={page}

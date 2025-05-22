@@ -57,7 +57,7 @@ const ComponentList = ({ productId }: Props) => {
             </Title>
 
             {data?.length > 0 ? (
-              <Table withTableBorder withColumnBorders>
+              <Table striped withTableBorder withColumnBorders>
                 <Table.Tbody>
                   {data?.map(({ name, description, id }: TProduct, index: number) => (
                     <Table.Tr key={index}>

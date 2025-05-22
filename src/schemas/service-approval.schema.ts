@@ -5,7 +5,7 @@ export const serviceApprovalSchema = yup.object().shape({
   product: yup.string().nullable().required('Product is required'),
   component: yup.string().nullable().required('Component is required'),
   vendor: yup.string().nullable().required('Vendor is required'),
-  cost: yup.number().typeError('Cost must be a number').required('Cost is required').min(0, 'Cost cannot be negative'),
+  cost: yup.number().typeError('Cost must be a number').required('Cost is required'),
   year: yup
     .date()
     .typeError('Invalid year format')

@@ -38,55 +38,63 @@ const ServiceApprovalForm = ({ initialValues, approvalId, categories, vendors }:
       description: '',
       ...initialValues,
       is_selected: initialValues ? (initialValues?.is_selected ? '1' : '0') : '1',
-      year: initialValues ? new Date(Number(initialValues.year), 0, 1) : new Date(new Date().getFullYear(), 11, 31)
+      year: initialValues ? initialValues.year : '2023'
     }
   })
 
   const submitHandler = (formData: TServiceApprovalForm) =>
     startTransition(async () => {
       const is_selected = formData?.is_selected === '1' ? true : false
-      const year = formData?.year! instanceof Date ? formData.year.getFullYear().toString() : ''
+      // const year = formData?.year? formData?.year?.substring(0, 4) : ''
+      const year = '2023'
       const values = { ...formData, is_selected, year, component_id: formData.component, vendor_id: formData.vendor }
 
       const res = approvalId ? await updateServiceApproval(approvalId, values) : await addServiceApproval(values)
 
       showNotification(getMessage(res))
 
-      if (res.status === StatusMsg.SUCCESS) closeAllModals()
+      // if (res.status === StatusMsg.SUCCESS) closeAllModals()
     })
 
   return (
     <form onSubmit={onSubmit(submitHandler)}>
-      <Select
-        label="Category"
-        placeholder="Select category"
-        data={categories.map(({ id, name }) => ({
-          value: id.toString(),
-          label: name
-        }))}
-        searchable
-        mb="xs"
-        {...getInputProps('category')}
-      />
+      <SimpleGrid cols={2} mb="xs">
+        <Select
+          label="Category"
+          placeholder="Select category"
+          data={categories.map(({ id, name }) => ({
+            value: id.toString(),
+            label: name
+          }))}
+          withAsterisk
+          searchable
+          {...getInputProps('category')}
+        />
 
-      <ProductsMenu categoryId={values.category!} getInputProps={getInputProps} />
-      <ComponentsMenu productId={values.product!} getInputProps={getInputProps} />
+        <ProductsMenu categoryId={values.category!} getInputProps={getInputProps} />
+        <ComponentsMenu productId={values.product!} getInputProps={getInputProps} />
 
-      <Select
-        label="Vendor"
-        placeholder="Select vendor"
-        data={vendors.map(({ id, name }) => ({
-          value: id.toString(),
-          label: name
-        }))}
-        searchable
-        withAsterisk
-        mb="xs"
-        {...getInputProps('vendor')}
-      />
+        <Select
+          label="Vendor"
+          placeholder="Select vendor"
+          data={vendors.map(({ id, name }) => ({
+            value: id.toString(),
+            label: name
+          }))}
+          searchable
+          withAsterisk
+          {...getInputProps('vendor')}
+        />
 
-      <SimpleGrid cols={2} spacing="xs" mb="xs">
-        <NumberInput label="Price" placeholder="Enter price " withAsterisk hideControls {...getInputProps('cost')} />
+        <NumberInput
+          label="Price"
+          placeholder="Enter price"
+          thousandSeparator=","
+          thousandsGroupStyle="lakh"
+          withAsterisk
+          hideControls
+          {...getInputProps('cost')}
+        />
 
         <YearPickerInput
           label="Year"

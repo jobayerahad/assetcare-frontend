@@ -8,7 +8,7 @@ export type TServiceApprovalForm = {
   component: string | null
   vendor: string | null
   cost: string | number
-  year: Date | string | null
+  year: string | null
   description: string
   is_selected: boolean | string
 }

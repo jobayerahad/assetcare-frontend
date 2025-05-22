@@ -1,3 +1,7 @@
+import { AxiosError } from 'axios'
+import { StatusMsg } from '@config/constants'
+import { ActionResponse, AssetStatus } from '@types'
+
 export const capWords = (str: string, exceptions: string[] = []) => {
   const exceptionSet = new Set(exceptions.map((ex) => ex.toUpperCase()))
 
@@ -24,4 +28,23 @@ export const paginateRes = <T>(data: T[], totalRecords: number, page: number, li
       hasPrevPage: page > 1
     }
   }
+}
+
+export const handleError = (error: unknown): ActionResponse => ({
+  status: StatusMsg.BAD_REQUEST,
+  message: error instanceof AxiosError ? error.response?.data.message : 'An unknown exception occurred'
+})
+
+export const getAssetStatus = (status: AssetStatus) => {
+  const statusMap = {
+    pending: { label: 'Pending', color: 'orange' },
+    in_progress: { label: 'In Progress', color: 'blue' },
+    under_repair: { label: 'Under Repair', color: 'blue' },
+    repaired: { label: 'Repaired', color: 'green' },
+    active: { label: 'Active', color: 'green' },
+    returned_to_branch: { label: 'Returned to Branch', color: 'teal' },
+    scrapped: { label: 'Scrapped', color: 'red' }
+  }
+
+  return statusMap[status] || { label: 'Unknown', color: 'gray' }
 }

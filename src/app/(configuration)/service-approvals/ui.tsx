@@ -1,7 +1,19 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { ActionIcon, Alert, Container, Group, Menu, Paper, Select, Table, Text, Tooltip } from '@mantine/core'
+import {
+  ActionIcon,
+  Alert,
+  Container,
+  Group,
+  Menu,
+  NumberFormatter,
+  Paper,
+  Select,
+  Table,
+  Text,
+  Tooltip
+} from '@mantine/core'
 import { openConfirmModal, openModal } from '@mantine/modals'
 import { YearPickerInput } from '@mantine/dates'
 import { showNotification } from '@mantine/notifications'
@@ -37,8 +49,8 @@ const ServiceApprovalUI = ({ data: { data, meta }, categories, vendors }: Props)
   const handleLimitChange = (val: string | null) => navigate({ per_page: val! })
   const handleCatChange = (val: string | null) => navigate({ category: val! })
   const handleVendorChange = (val: string | null) => navigate({ vendor: val! })
-  const handleYearChange = (val: Date | null) => {
-    if (val) navigate({ year: val.getFullYear().toString() })
+  const handleYearChange = (val: string | null) => {
+    if (val) navigate({ year: val?.substring(0, 4) })
     else navigate({ year: '' })
   }
 
@@ -46,7 +58,7 @@ const ServiceApprovalUI = ({ data: { data, meta }, categories, vendors }: Props)
     openModal({
       title: 'Add New Service Approval',
       children: <ServiceApprovalForm categories={categories} vendors={vendors} />,
-      size: 'lg',
+      size: 'xl',
       closeOnClickOutside: false,
       centered: true
     })
@@ -55,7 +67,7 @@ const ServiceApprovalUI = ({ data: { data, meta }, categories, vendors }: Props)
     openModal({
       title: 'Edit Service Approval',
       children: <ServiceApprovalForm categories={categories} vendors={vendors} approvalId={id} initialValues={data} />,
-      size: 'lg',
+      size: 'xl',
       closeOnClickOutside: false,
       centered: true
     })
@@ -157,7 +169,9 @@ const ServiceApprovalUI = ({ data: { data, meta }, categories, vendors }: Props)
                       <Table.Td>{component?.product?.name}</Table.Td>
                       <Table.Td>{component?.name}</Table.Td>
                       <Table.Td>{vendor?.name}</Table.Td>
-                      <Table.Td>{cost}</Table.Td>
+                      <Table.Td>
+                        <NumberFormatter thousandSeparator thousandsGroupStyle="lakh" value={cost} />
+                      </Table.Td>
                       <Table.Td>{year}</Table.Td>
 
                       <Table.Td>

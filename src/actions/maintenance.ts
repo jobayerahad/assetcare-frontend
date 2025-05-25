@@ -21,6 +21,17 @@ export const getAssetMaintenances = async (params: AssetSearchParams) => {
   }
 }
 
+export const getAssetLatestTransfer = async (assetId: number) => {
+  try {
+    const apiObj = await api()
+    const { data } = await apiObj.get(`/assets/${assetId}/latest-transfer`)
+
+    return data.data
+  } catch (error) {
+    return null
+  }
+}
+
 export const getMaintenance = async (id: string) => {
   try {
     const apiObj = await api()
@@ -53,7 +64,23 @@ export const scrapAsset = async (id: number, reason: string): Promise<ActionResp
 export const diagnosisAsset = async (id: number, formData: any): Promise<ActionResponse> => {
   try {
     const apiObj = await api()
-    const { data } = await apiObj.post(`/asset-repairs/${id}/diagnosis`, formData)
+    const { data } = await apiObj.patch(`/asset-repairs/${id}/diagnosis`, formData)
+
+    revalidatePath('/maintenance')
+
+    return {
+      status: StatusMsg.SUCCESS,
+      message: data.message
+    }
+  } catch (error) {
+    return handleError(error)
+  }
+}
+
+export const sendToVendorAsset = async (id: number, formData: any): Promise<ActionResponse> => {
+  try {
+    const apiObj = await api()
+    const { data } = await apiObj.post(`/asset-repairs/${id}/send-to-vendor`, formData)
 
     revalidatePath('/maintenance')
 

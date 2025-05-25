@@ -78,7 +78,7 @@ const AssetReceiveForm = ({ categories, user, branches, divisions, vendors }: Pr
 
   return (
     <Container>
-      <TitleBar title="Asset Receive" url="/" />
+      <TitleBar title="Asset Receive" />
 
       <Paper component="form" shadow="xs" p="md" onSubmit={onSubmit(submitHandler)} mt="xs">
         <DateTimePicker

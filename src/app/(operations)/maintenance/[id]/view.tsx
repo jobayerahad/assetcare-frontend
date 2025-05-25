@@ -11,30 +11,87 @@ import {
   Table,
   Text,
   Textarea,
-  Title
+  Title,
+  Tooltip
 } from '@mantine/core'
 import { VscDebugStart as StartIcon } from 'react-icons/vsc'
-import { closeAllModals } from '@mantine/modals'
+import { closeAllModals, openModal } from '@mantine/modals'
 import { SiScrapy as ScrapIcon } from 'react-icons/si'
 import { IoIosMore as MoreIcon, IoIosSend as SendIcon } from 'react-icons/io'
+import { TbReportAnalytics as DiagnoseIcon } from 'react-icons/tb'
 
-import { getAssetStatus } from '@utils/helpers'
-import { TAssetMaintenance } from '@types'
 import TitleBar from '@components/common/title-bar'
+import Diagnosis from './diagnosis'
+import ScrapAsset from './scrap'
+import ToVendor from './to-vendor'
+import { getAssetStatus } from '@utils/helpers'
+import { TAssetMaintenance, TVendor } from '@types'
 
 type Props = {
   data: TAssetMaintenance
+  vendors: TVendor[]
 }
 
-const MaintenanceDetailUI = ({ data }: Props) => {
+const MaintenanceDetailUI = ({ data, vendors }: Props) => {
+  const diagnosisHandler = () =>
+    openModal({
+      title: 'Dignosis Report',
+      children: <Diagnosis id={data.id} />,
+      centered: true
+    })
+
+  const scrapHandler = () =>
+    openModal({
+      title: 'Scrap Asset',
+      children: <ScrapAsset id={data.id} />,
+      size: 'lg',
+      centered: true
+    })
+
+  const toVendorHandler = () =>
+    openModal({
+      title: 'Send to Vendor',
+      children: <ToVendor assetId={data.asset_id} repairId={data.id} vendors={vendors} />,
+      size: 'lg',
+      centered: true
+    })
+
   return (
     <Container>
-      <Group justify="space-between" mb={8}>
+      <Group justify="space-between" mb="xs">
         <TitleBar title={`Maintenance ID: ${data.id}`} />
 
-        <Badge variant="light" color={getAssetStatus(data.status).color}>
-          {getAssetStatus(data.status).label}
-        </Badge>
+        <Group gap="xs">
+          <Badge variant="light" color={getAssetStatus(data.status).color}>
+            {getAssetStatus(data.status).label}
+          </Badge>
+
+          {data.status === 'pending' && (
+            <Tooltip label="Dignosis Report" withArrow position="bottom">
+              <ActionIcon onClick={() => diagnosisHandler()} variant="default" size="sm">
+                <DiagnoseIcon />
+              </ActionIcon>
+            </Tooltip>
+          )}
+
+          {data.status === 'in_progress' && (
+            <>
+              {!data.vendor_id && (
+                <Tooltip label="Send to Vendor" withArrow position="bottom">
+                  <ActionIcon onClick={() => toVendorHandler()} variant="filled" color="blue" size="sm">
+                    <SendIcon />
+                  </ActionIcon>
+                </Tooltip>
+              )}
+
+              <Tooltip label="Dignosis Report" withArrow position="bottom">
+                <ActionIcon onClick={() => diagnosisHandler()} variant="default" size="sm">
+                  <DiagnoseIcon />
+                </ActionIcon>
+              </Tooltip>
+            </>
+          )}
+        </Group>
       </Group>
 
       <Group justify="space-between" mb="sm">

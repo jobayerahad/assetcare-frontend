@@ -3,6 +3,7 @@ import { Button, Textarea } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
 import { closeAllModals } from '@mantine/modals'
+import { FaSave as SaveIcon } from 'react-icons/fa'
 
 import { diagnosisAsset } from '@actions/maintenance'
 import { StatusMsg } from '@config/constants'
@@ -17,7 +18,7 @@ const Diagnosis = ({ id }: Props) => {
 
   const { onSubmit, getInputProps } = useForm({
     initialValues: {
-      diagnosis: ''
+      diagnosis_details: ''
     }
   })
 
@@ -35,11 +36,11 @@ const Diagnosis = ({ id }: Props) => {
         label="Dignosis Report"
         placeholder="Write diagnosis report (optional)"
         rows={4}
-        {...getInputProps('diagnosis')}
+        {...getInputProps('diagnosis_details')}
       />
 
-      <Button type="submit" mt="md" loading={isLoading} fullWidth>
-        Save
+      <Button type="submit" mt="md" loading={isLoading} leftSection={<SaveIcon />} fullWidth>
+        Submit
       </Button>
     </form>
   )

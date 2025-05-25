@@ -7,51 +7,52 @@ import { showNotification } from '@mantine/notifications'
 import { closeAllModals } from '@mantine/modals'
 import { FaSave as SaveIcon } from 'react-icons/fa'
 
-import { transferAsset } from '@actions/assets'
+import { sendToVendorAsset } from '@actions/maintenance'
 import { StatusMsg } from '@config/constants'
 import { assetTransferSchema } from '@schemas/asset.schema'
 import { getMessage } from '@utils/notification'
-import { TAsset, TAssetTransferForm, TVendor } from '@types'
+import { TAssetTransferForm, TVendor } from '@types'
 
 type Props = {
-  data: TAsset
+  assetId: number
+  repairId: number
   vendors: TVendor[]
 }
 
-const ToVendor = ({ data, vendors }: Props) => {
+const ToVendor = ({ assetId, repairId, vendors }: Props) => {
   const [isLoading, startTransition] = useTransition()
 
-  const { onSubmit, getInputProps, errors } = useForm<TAssetTransferForm>({
+  const { onSubmit, getInputProps } = useForm<TAssetTransferForm>({
     validate: yupResolver(assetTransferSchema),
     initialValues: {
-      asset_id: data.id.toString(),
-      from_location_type: data.current_location_type,
-      from_location_id: data.current_location_id.toString(),
+      asset_id: assetId.toString(),
+      from_location_type: 'division',
+      from_location_id: '15',
       to_location_type: 'vendor',
       to_location_id: null,
-      transfer_type: 'sent_for_repair', // If vendor then other
+      transfer_type: 'sent_for_repair',
       transfer_date: new Date(),
       received_by: '',
-      category: data.product?.category?.id.toString(),
-      product: data.product?.id.toString(),
+      category: 'a', // For Override Validation
+      product: 'b', // For Override Validation
       remarks: ''
     }
   })
 
   const submitHandler = (formData: TAssetTransferForm) =>
     startTransition(async () => {
-      const val: TAssetTransferForm = {
-        ...formData,
-        transfer_date: dayjs().format('YYYY-MM-DD HH:mm:ss')
+      const val = {
+        received_by: formData.received_by,
+        vendor_id: formData.to_location_id,
+        transfer_date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        remarks: formData.remarks
       }
 
-      const res = await transferAsset(val)
-
+      const res = await sendToVendorAsset(repairId, val)
       showNotification(getMessage(res))
+
       if (res.status === StatusMsg.SUCCESS) closeAllModals()
     })
-
-  console.log(errors)
 
   return (
     <form onSubmit={onSubmit(submitHandler)}>
@@ -67,12 +68,6 @@ const ToVendor = ({ data, vendors }: Props) => {
       />
 
       <SimpleGrid cols={2} mb="xs">
-        <TextInput label="Category" value={data.product?.category?.name} readOnly />
-        <TextInput label="Product" value={data.product?.name} readOnly />
-
-        <TextInput label="Model" value={data.model} readOnly />
-        <TextInput label="Serial No" value={data.serial_number} readOnly />
-
         <Select
           label="Vendor"
           placeholder="Select vendor"
@@ -84,6 +79,7 @@ const ToVendor = ({ data, vendors }: Props) => {
           withAsterisk
           {...getInputProps('to_location_id')}
         />
+
         <TextInput label="Received By" placeholder="Enter receiver person name" {...getInputProps('received_by')} />
       </SimpleGrid>
 

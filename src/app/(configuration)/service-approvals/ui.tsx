@@ -92,7 +92,7 @@ const ServiceApprovalUI = ({ data: { data, meta }, categories, vendors }: Props)
   return (
     <Container size="xl">
       <Group justify="space-between" mb="xs">
-        <TitleBar title="Service Approvals" url="/" />
+        <TitleBar title="Service Approvals" />
 
         <Group gap="xs" align="flex-end">
           <Select

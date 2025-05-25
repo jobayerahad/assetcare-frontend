@@ -78,7 +78,7 @@ const CategoryList = ({ data: { data, meta } }: Props) => {
   return (
     <Container>
       <Group justify="space-between" mb="xs">
-        <TitleBar title="Category List" url="/" />
+        <TitleBar title="Category List" />
 
         <Group gap="xs">
           <TextInput

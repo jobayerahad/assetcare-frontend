@@ -5,13 +5,10 @@ import pluralize from 'pluralize'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { ActionIcon, Alert, Badge, Container, Group, Paper, Table, TextInput, Tooltip } from '@mantine/core'
-import { openModal } from '@mantine/modals'
 import { useDebouncedValue } from '@mantine/hooks'
 import { FaEye as ViewIcon } from 'react-icons/fa'
 import { FiSearch as SearchIcon } from 'react-icons/fi'
 
-import ScrapAsset from './scrap'
-import ToVendor from './to-vendor'
 import TitleBar from '@components/common/title-bar'
 import TableNav from '@components/common/table-nav'
 import useNavigation from '@hooks/useNavigation'
@@ -39,22 +36,6 @@ const MaintenanceList = ({ data: { data, meta }, branches, divisions, vendors, c
   const handlePageChange = (val: number) => navigate({ page: val.toString() })
   const handleLimitChange = (val: string | null) => navigate({ per_page: val! })
 
-  const scrapHandler = (id: number) =>
-    openModal({
-      title: 'Scrap Asset',
-      children: <ScrapAsset id={id} />,
-      size: 'lg',
-      centered: true
-    })
-
-  const toVendorHandler = (data: TAsset) =>
-    openModal({
-      title: 'Send to Vendor',
-      children: <ToVendor data={data} vendors={vendors} />,
-      size: 'lg',
-      centered: true
-    })
-
   useEffect(() => {
     const currentSearch = searchParams.get('search') || ''
     if (search !== currentSearch) navigate({ search, page: '1' })
@@ -63,7 +44,7 @@ const MaintenanceList = ({ data: { data, meta }, branches, divisions, vendors, c
   return (
     <Container size="lg">
       <Group justify="space-between" mb="xs">
-        <TitleBar title="Asset Maintenance" url="/" />
+        <TitleBar title="Asset Maintenance" />
 
         <Group gap="xs">
           <TextInput

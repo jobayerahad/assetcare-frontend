@@ -88,7 +88,7 @@ const AssetList = ({ data: { data, meta }, branches, divisions, categories }: Pr
   return (
     <Container size="lg">
       <Group justify="space-between" mb="xs">
-        <TitleBar title="Asset List" url="/" />
+        <TitleBar title="Asset List" />
 
         <Group gap="xs">
           <TextInput

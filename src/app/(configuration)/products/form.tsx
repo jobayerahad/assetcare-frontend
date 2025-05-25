@@ -83,7 +83,7 @@ const ProductForm = ({ initialValues, productId, categories }: Props) => {
   else
     return (
       <Container size="sm">
-        <TitleBar title="Add Product" url="/" />
+        <TitleBar title="Add Product" />
 
         <Paper shadow="xs" p="sm" mt="xs">
           {form}

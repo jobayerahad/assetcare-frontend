@@ -93,7 +93,7 @@ const ComponentForm = ({ initialValues, productId, categories }: Props) => {
   else
     return (
       <Container size="sm">
-        <TitleBar title="Add Component" url="/" />
+        <TitleBar title="Add Component" />
 
         <Paper shadow="xs" p="sm" mt="xs">
           {form}

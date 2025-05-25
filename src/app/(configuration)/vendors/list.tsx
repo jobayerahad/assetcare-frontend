@@ -91,7 +91,7 @@ const VendorList = ({ data: { data, meta } }: Props) => {
   return (
     <Container>
       <Group justify="space-between" mb="xs">
-        <TitleBar title="Vendor List" url="/" />
+        <TitleBar title="Vendor List" />
 
         <Group gap="xs">
           <TextInput

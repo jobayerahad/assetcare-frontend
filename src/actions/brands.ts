@@ -6,12 +6,12 @@ import { notFound } from 'next/navigation'
 import api from '@utils/api'
 import { StatusMsg } from '@config/constants'
 import { handleError } from '@utils/helpers'
-import { ActionResponse, SearchParams, TVendor } from '@types'
+import { ActionResponse, SearchParams, TBrand } from '@types'
 
-export const getVendors = async (params: SearchParams) => {
+export const getBrands = async (params: SearchParams) => {
   try {
     const apiObj = await api()
-    const { data } = await apiObj.get('/vendors', { params })
+    const { data } = await apiObj.get('/brands', { params })
 
     return data
   } catch (error) {
@@ -19,10 +19,10 @@ export const getVendors = async (params: SearchParams) => {
   }
 }
 
-export const getAllVendors = async () => {
+export const getAllBrands = async () => {
   try {
     const apiObj = await api()
-    const { data } = await apiObj.get('/vendors/all')
+    const { data } = await apiObj.get('/brands/all')
 
     return data.data
   } catch (error) {
@@ -30,12 +30,12 @@ export const getAllVendors = async () => {
   }
 }
 
-export const addVendor = async (formData: Partial<TVendor>): Promise<ActionResponse> => {
+export const addBrand = async (formData: Partial<TBrand>): Promise<ActionResponse> => {
   try {
     const apiObj = await api()
-    const { data } = await apiObj.post('/vendors', formData)
+    const { data } = await apiObj.post('/brands', formData)
 
-    revalidatePath('/vendors')
+    revalidatePath('/brands')
 
     return {
       status: StatusMsg.SUCCESS,
@@ -46,12 +46,12 @@ export const addVendor = async (formData: Partial<TVendor>): Promise<ActionRespo
   }
 }
 
-export const updateVendor = async (id: number, formData: Partial<TVendor>): Promise<ActionResponse> => {
+export const updateBrand = async (id: number, formData: Partial<TBrand>): Promise<ActionResponse> => {
   try {
     const apiObj = await api()
-    const { data } = await apiObj.put(`/vendors/${id}`, formData)
+    const { data } = await apiObj.put(`/brands/${id}`, formData)
 
-    revalidatePath('/vendors')
+    revalidatePath('/brands')
 
     return {
       status: StatusMsg.SUCCESS,
@@ -62,16 +62,16 @@ export const updateVendor = async (id: number, formData: Partial<TVendor>): Prom
   }
 }
 
-export const deleteVendor = async (id: number): Promise<ActionResponse> => {
+export const deleteBrand = async (id: number): Promise<ActionResponse> => {
   try {
     const apiObj = await api()
-    await apiObj.delete(`/vendors/${id}`)
+    await apiObj.delete(`/brands/${id}`)
 
-    revalidatePath('/vendors')
+    revalidatePath('/brands')
 
     return {
       status: StatusMsg.SUCCESS,
-      message: 'Vendor deleted successfully'
+      message: 'Brand deleted successfully'
     }
   } catch (error) {
     return handleError(error)

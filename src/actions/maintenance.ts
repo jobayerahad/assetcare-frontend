@@ -45,10 +45,10 @@ export const getMaintenance = async (id: string) => {
   }
 }
 
-export const scrapAsset = async (id: number, reason: string): Promise<ActionResponse> => {
+export const scrapAsset = async (id: number, formData: any): Promise<ActionResponse> => {
   try {
     const apiObj = await api()
-    const { data } = await apiObj.post(`/assets/${id}/scrap`, { reason })
+    const { data } = await apiObj.post(`/assets/${id}/scrap`, formData)
 
     revalidatePath('/maintenance')
 

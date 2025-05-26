@@ -16,7 +16,7 @@ import {
 } from '@mantine/core'
 import { VscDebugStart as StartIcon } from 'react-icons/vsc'
 import { closeAllModals, openModal } from '@mantine/modals'
-import { SiScrapy as ScrapIcon } from 'react-icons/si'
+import { GiBroom as ScrapIcon } from 'react-icons/gi'
 import { IoIosMore as MoreIcon, IoIosSend as SendIcon } from 'react-icons/io'
 import { TbReportAnalytics as DiagnoseIcon } from 'react-icons/tb'
 
@@ -37,13 +37,14 @@ const MaintenanceDetailUI = ({ data, vendors }: Props) => {
     openModal({
       title: 'Dignosis Report',
       children: <Diagnosis id={data.id} />,
+      size: 'lg',
       centered: true
     })
 
   const scrapHandler = () =>
     openModal({
       title: 'Scrap Asset',
-      children: <ScrapAsset id={data.id} />,
+      children: <ScrapAsset id={data.asset_id} />,
       size: 'lg',
       centered: true
     })
@@ -68,7 +69,7 @@ const MaintenanceDetailUI = ({ data, vendors }: Props) => {
 
           {data.status === 'pending' && (
             <Tooltip label="Dignosis Report" withArrow position="bottom">
-              <ActionIcon onClick={() => diagnosisHandler()} variant="default" size="sm">
+              <ActionIcon onClick={() => diagnosisHandler()} size="sm" variant="filled" color="blue">
                 <DiagnoseIcon />
               </ActionIcon>
             </Tooltip>
@@ -84,9 +85,9 @@ const MaintenanceDetailUI = ({ data, vendors }: Props) => {
                 </Tooltip>
               )}
 
-              <Tooltip label="Dignosis Report" withArrow position="bottom">
-                <ActionIcon onClick={() => diagnosisHandler()} variant="default" size="sm">
-                  <DiagnoseIcon />
+              <Tooltip label="Scrap Asset" withArrow position="bottom">
+                <ActionIcon onClick={() => scrapHandler()} variant="filled" color="red" size="sm">
+                  <ScrapIcon />
                 </ActionIcon>
               </Tooltip>
             </>

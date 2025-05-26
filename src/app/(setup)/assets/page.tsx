@@ -18,11 +18,10 @@ export const metadata: Metadata = {
 const Assets = async (props: Props) => {
   const params = await props.searchParams
 
-  const [data, branches, divisions, vendors, categories] = await Promise.all([
+  const [data, branches, divisions, categories] = await Promise.all([
     getAssets({ ...params, status: 'active' }),
     getBranches(),
     getDivisions(),
-    getAllVendors(),
     getAllCategory()
   ])
 

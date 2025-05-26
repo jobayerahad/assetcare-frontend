@@ -6,12 +6,14 @@ import { notFound } from 'next/navigation'
 import api from '@utils/api'
 import { StatusMsg } from '@config/constants'
 import { handleError } from '@utils/helpers'
-import { ActionResponse, SearchParams, TVendor } from '@types'
+import { ActionResponse, SearchParams, TAssetItemForm } from '@types'
 
-export const getVendors = async (params: SearchParams) => {
+export const getItems = async (params: SearchParams) => {
   try {
     const apiObj = await api()
-    const { data } = await apiObj.get('/vendors', { params })
+    const { data } = await apiObj.get('/items', {
+      params: { ...params, include: 'brand,product.category' }
+    })
 
     return data
   } catch (error) {
@@ -19,10 +21,10 @@ export const getVendors = async (params: SearchParams) => {
   }
 }
 
-export const getAllVendors = async () => {
+export const getAllItems = async () => {
   try {
     const apiObj = await api()
-    const { data } = await apiObj.get('/vendors/all')
+    const { data } = await apiObj.get('/items/all')
 
     return data.data
   } catch (error) {
@@ -30,12 +32,12 @@ export const getAllVendors = async () => {
   }
 }
 
-export const addVendor = async (formData: Partial<TVendor>): Promise<ActionResponse> => {
+export const addItem = async (formData: TAssetItemForm): Promise<ActionResponse> => {
   try {
     const apiObj = await api()
-    const { data } = await apiObj.post('/vendors', formData)
+    const { data } = await apiObj.post('/items', formData)
 
-    revalidatePath('/vendors')
+    revalidatePath('/items')
 
     return {
       status: StatusMsg.SUCCESS,
@@ -46,12 +48,12 @@ export const addVendor = async (formData: Partial<TVendor>): Promise<ActionRespo
   }
 }
 
-export const updateVendor = async (id: number, formData: Partial<TVendor>): Promise<ActionResponse> => {
+export const updateItem = async (id: number, formData: TAssetItemForm): Promise<ActionResponse> => {
   try {
     const apiObj = await api()
-    const { data } = await apiObj.put(`/vendors/${id}`, formData)
+    const { data } = await apiObj.put(`/items/${id}`, formData)
 
-    revalidatePath('/vendors')
+    revalidatePath('/items')
 
     return {
       status: StatusMsg.SUCCESS,
@@ -62,16 +64,16 @@ export const updateVendor = async (id: number, formData: Partial<TVendor>): Prom
   }
 }
 
-export const deleteVendor = async (id: number): Promise<ActionResponse> => {
+export const deleteItem = async (id: number): Promise<ActionResponse> => {
   try {
     const apiObj = await api()
-    await apiObj.delete(`/vendors/${id}`)
+    await apiObj.delete(`/items/${id}`)
 
-    revalidatePath('/vendors')
+    revalidatePath('/items')
 
     return {
       status: StatusMsg.SUCCESS,
-      message: 'Vendor deleted successfully'
+      message: 'Item deleted successfully'
     }
   } catch (error) {
     return handleError(error)

@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useTransition } from 'react'
 import { Button, Textarea } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
-import { SiScrapy as ScrapIcon } from 'react-icons/si'
 import { closeAllModals } from '@mantine/modals'
+import { useForm } from '@mantine/form'
+import { GiBroom as ScrapIcon } from 'react-icons/gi'
 
 import { scrapAsset } from '@actions/maintenance'
 import { StatusMsg } from '@config/constants'
@@ -13,26 +14,32 @@ type Props = {
 }
 
 const ScrapAsset = ({ id }: Props) => {
-  const [reason, setReason] = useState('')
+  const [isLoading, startTransition] = useTransition()
 
-  const submitHandler = async () => {
-    const res = await scrapAsset(id, reason)
-    showNotification(getMessage(res))
-    if (res.status === StatusMsg.SUCCESS) closeAllModals()
-  }
+  const { onSubmit, getInputProps } = useForm({
+    initialValues: {
+      reason: ''
+    }
+  })
+
+  const submitHandler = (values: any) =>
+    startTransition(async () => {
+      const res = await scrapAsset(id, values)
+
+      showNotification(getMessage(res))
+      if (res.status === StatusMsg.SUCCESS) closeAllModals()
+    })
 
   return (
-    <form>
+    <form onSubmit={onSubmit(submitHandler)}>
       <Textarea
         label="Scrap Reason"
         placeholder="Enter reason for scraping the asset (optional)"
-        value={reason}
-        mb="sm"
         rows={4}
-        onChange={(e) => setReason(e.currentTarget.value)}
+        {...getInputProps('reason')}
       />
 
-      <Button leftSection={<ScrapIcon />} onClick={submitHandler}>
+      <Button type="submit" mt="md" leftSection={<ScrapIcon />} loading={isLoading}>
         Scrap
       </Button>
     </form>

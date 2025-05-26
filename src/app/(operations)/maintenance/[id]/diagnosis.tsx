@@ -39,7 +39,7 @@ const Diagnosis = ({ id }: Props) => {
         {...getInputProps('diagnosis_details')}
       />
 
-      <Button type="submit" mt="md" loading={isLoading} leftSection={<SaveIcon />} fullWidth>
+      <Button type="submit" mt="md" loading={isLoading} leftSection={<SaveIcon />}>
         Submit
       </Button>
     </form>

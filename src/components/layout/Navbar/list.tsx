@@ -1,11 +1,17 @@
 import { ReactNode } from 'react'
 import { AiOutlineDashboard as DashboardIcon, AiOutlineShop as VendorIcon } from 'react-icons/ai'
-import { BiCabinet as ProductIcon, BiCategory as CategoryIcon, BiSolidComponent as ComponentIcon } from 'react-icons/bi'
+import {
+  BiFoodMenu as MenuIcon,
+  BiCabinet as ProductIcon,
+  BiCategory as CategoryIcon,
+  BiSolidComponent as ComponentIcon
+} from 'react-icons/bi'
 import { MdAttachMoney as CostIcon } from 'react-icons/md'
 import { GrConfigure as ConfigIcon } from 'react-icons/gr'
 import { GoLog as LogIcon } from 'react-icons/go'
 import { LuSettings as OperationIcon } from 'react-icons/lu'
-import { TbReport as ReportIcon, TbBuildingBurjAlArab as AssetIcon } from 'react-icons/tb'
+import { TbBrandBebo as BrandIcon, TbReport as ReportIcon, TbBuildingBurjAlArab as AssetIcon } from 'react-icons/tb'
+import { RiAlignItemLeftLine as ItemIcon } from 'react-icons/ri'
 
 type MenuItem = {
   link: string
@@ -25,14 +31,22 @@ export const menuItems = [
   { link: '/', label: 'Dashboard', icon: <DashboardIcon /> },
   {
     label: 'Configuration',
-    icon: <ConfigIcon />,
+    icon: <MenuIcon />,
     links: [
       { link: '/categories', label: 'Categories', icon: <CategoryIcon /> },
       { link: '/products', label: 'Products', icon: <ProductIcon /> },
+      { link: '/brands', label: 'Brands', icon: <BrandIcon /> },
       { link: '/components', label: 'Components', icon: <ComponentIcon /> },
-      { link: '/vendors', label: 'Vendors', icon: <VendorIcon /> },
-      { link: '/service-approvals', label: 'Approval Price', icon: <CostIcon /> },
-      { link: '/assets', label: 'Assets', icon: <AssetIcon /> }
+      { link: '/vendors', label: 'Vendors', icon: <VendorIcon /> }
+    ]
+  },
+  {
+    label: 'Setup',
+    icon: <ConfigIcon />,
+    links: [
+      { link: '/items', label: 'Items', icon: <ItemIcon /> },
+      { link: '/assets', label: 'Assets', icon: <AssetIcon /> },
+      { link: '/service-approvals', label: 'Approval Price', icon: <CostIcon /> }
     ]
   },
   {

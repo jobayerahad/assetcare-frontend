@@ -1,0 +1,162 @@
+'use client'
+
+import pluralize from 'pluralize'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { ActionIcon, Alert, Container, Group, Menu, Paper, Table, Text, TextInput, Tooltip } from '@mantine/core'
+import { openConfirmModal, openModal } from '@mantine/modals'
+import { showNotification } from '@mantine/notifications'
+import { useDebouncedValue } from '@mantine/hooks'
+import { IoMdAdd as AddIcon, IoIosMore as MoreIcon } from 'react-icons/io'
+import { FiSearch as SearchIcon } from 'react-icons/fi'
+import { MdDeleteOutline as DeleteIcon, MdEdit as EditIcon } from 'react-icons/md'
+
+import BrandForm from './form'
+import TitleBar from '@components/common/title-bar'
+import TableNav from '@components/common/table-nav'
+import useNavigation from '@hooks/useNavigation'
+import { deleteBrand } from '@actions/brands'
+import { getMessage } from '@utils/notification'
+import { TBrand, PaginationResponse } from '@types'
+
+type Props = {
+  data: PaginationResponse<TBrand>
+}
+
+const BrandList = ({ data: { data, meta } }: Props) => {
+  const searchParams = useSearchParams()!
+  const { navigate } = useNavigation()
+
+  const [interSearch, setInterSearch] = useState(searchParams.get('search') || '')
+  const [search] = useDebouncedValue(interSearch, 400)
+
+  const page = Number(searchParams.get('page')) || 1
+  const limit = searchParams.get('per_page') || '10'
+
+  const handlePageChange = (val: number) => navigate({ page: val.toString() })
+  const handleLimitChange = (val: string | null) => navigate({ per_page: val! })
+
+  const addHandler = () =>
+    openModal({
+      title: 'Add New Brand',
+      children: <BrandForm />,
+      size: 'lg',
+      closeOnClickOutside: false,
+      centered: true
+    })
+
+  const editHandler = (id: number, data: Partial<TBrand>) =>
+    openModal({
+      title: 'Edit Brand',
+      children: <BrandForm brandId={id} initialValues={data} />,
+      size: 'lg',
+      closeOnClickOutside: false,
+      centered: true
+    })
+
+  const deleteHandler = (id: number) =>
+    openConfirmModal({
+      title: 'Delete This Brand?',
+      children: (
+        <Text size="sm">Are you sure you want to delete this brand? This action is destructive and can't reverse.</Text>
+      ),
+      labels: { confirm: 'Delete', cancel: 'Cancel' },
+      confirmProps: { color: 'red', variant: 'filled' },
+      onConfirm: async () => {
+        const res = await deleteBrand(id)
+        showNotification(getMessage(res))
+      },
+      centered: true
+    })
+
+  useEffect(() => {
+    const currentSearch = searchParams.get('search') || ''
+    if (search !== currentSearch) navigate({ search, page: '1' })
+  }, [search])
+
+  return (
+    <Container>
+      <Group justify="space-between" mb="xs">
+        <TitleBar title="Brand List" />
+
+        <Group gap="xs">
+          <TextInput
+            placeholder="Search here..."
+            value={interSearch}
+            onChange={(event) => setInterSearch(event.currentTarget.value)}
+            leftSection={<SearchIcon />}
+            miw={250}
+            size="xs"
+          />
+
+          <Tooltip label="Add Brand" withArrow position="bottom">
+            <ActionIcon onClick={addHandler}>
+              <AddIcon />
+            </ActionIcon>
+          </Tooltip>
+        </Group>
+      </Group>
+
+      {meta.total > 0 ? (
+        <>
+          <Paper shadow="xs" mb="xs">
+            <Table verticalSpacing={10} horizontalSpacing="sm" striped highlightOnHover>
+              <Table.Thead style={{ userSelect: 'none' }}>
+                <Table.Tr>
+                  <Table.Th>Sl.</Table.Th>
+                  <Table.Th>Name</Table.Th>
+                  <Table.Th>Remarks</Table.Th>
+                  <Table.Th></Table.Th>
+                </Table.Tr>
+              </Table.Thead>
+
+              <Table.Tbody>
+                {data.map(({ id, name, remarks }, index) => (
+                  <Table.Tr key={index}>
+                    <Table.Td>{index + 1}</Table.Td>
+                    <Table.Td>{name}</Table.Td>
+                    <Table.Td>{remarks}</Table.Td>
+
+                    <Table.Td>
+                      <Menu shadow="md" withArrow>
+                        <Menu.Target>
+                          <ActionIcon variant="subtle" size="sm">
+                            <MoreIcon />
+                          </ActionIcon>
+                        </Menu.Target>
+
+                        <Menu.Dropdown>
+                          <Menu.Item leftSection={<EditIcon />} onClick={() => editHandler(id, { name, remarks })}>
+                            Edit
+                          </Menu.Item>
+
+                          <Menu.Item color="red" leftSection={<DeleteIcon />} onClick={() => deleteHandler(id)}>
+                            Delete
+                          </Menu.Item>
+                        </Menu.Dropdown>
+                      </Menu>
+                    </Table.Td>
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </Table>
+          </Paper>
+
+          <TableNav
+            listName={pluralize('brand', meta.total)}
+            limit={limit}
+            limitHandler={handleLimitChange}
+            page={page}
+            pageHandler={handlePageChange}
+            totalPages={meta.last_page}
+            totalRecords={meta.total}
+          />
+        </>
+      ) : (
+        <Alert title="No brands found">Once any brand added, the list will appear here.</Alert>
+      )}
+    </Container>
+  )
+}
+
+export default BrandList

@@ -1,5 +1,5 @@
+import { TItem } from './item'
 import { TBranch, TDivision } from './location'
-import { TProduct } from './product'
 import { SearchParams } from './utilities'
 import { TVendor } from './vendor'
 
@@ -16,9 +16,8 @@ export type TAssetForm = {
   branch_id: string | null
   division_id: string | null
   category: string | null
-  product_id: string | null
-  brand: string
-  model: string
+  product: string | null
+  item_id: string | null
   serial_number: string
   current_location_type: 'branch' | 'division' | 'vendor' | string
   current_location_id: string | null
@@ -45,9 +44,7 @@ export type TAsset = {
   id: number
   branch_id: number
   division_id: number
-  product_id: number
-  brand: string
-  model: string
+  item_id: number
   serial_number: string
   status: AssetStatus
   current_location_type: 'branch' | 'division' | 'vendor'
@@ -55,7 +52,7 @@ export type TAsset = {
   remarks: string
   branch: TBranch
   division: TDivision
-  product: TProduct
+  item: TItem
   created_at: Date
   updated_at: Date
 }
@@ -82,4 +79,12 @@ export type TAssetMaintenance = {
 
 export type AssetSearchParams = SearchParams & {
   status: AssetStatus
+}
+
+export type TFilteredAsset = {
+  id: number
+  serial_no: string
+  model: string
+  product: string
+  brand: string
 }

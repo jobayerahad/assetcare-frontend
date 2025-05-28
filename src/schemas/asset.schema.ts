@@ -13,23 +13,13 @@ export const assetFormSchema = yup.object().shape({
     }),
 
   category: yup.string().required('Category is required'),
+  product: yup.string().required('Product is required'),
 
-  product_id: yup.string().nullable().required('Product is required'),
-
-  brand: yup.string().required('Model is required'),
-
-  model: yup.string().required('Model is required'),
+  item_id: yup.string().nullable().required('Item is required'),
 
   serial_number: yup.string().required('Serial number is required'),
 
   status: yup.string().oneOf(['active', 'inactive'], 'Invalid status').required('Status is required'),
-
-  // current_location_type: yup
-  //   .string()
-  //   .oneOf(['Branch', 'Division', 'Vendor'], 'Invalid location type')
-  //   .required('Location type is required'),
-
-  // current_location_id: yup.string().required('Location ID is required'),
 
   remarks: yup.string().nullable()
 })

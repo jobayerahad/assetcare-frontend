@@ -1,10 +1,7 @@
 import type { Metadata } from 'next'
 
 import AssetList from './list'
-import { getAllCategory } from '@actions/categories'
 import { getAssetMaintenances } from '@actions/maintenance'
-import { getBranches, getDivisions } from '@actions/locations'
-import { getAllVendors } from '@actions/vendors'
 import { AssetSearchParams } from '@types'
 
 type Props = {
@@ -18,15 +15,9 @@ export const metadata: Metadata = {
 const AssetMaintenance = async (props: Props) => {
   const params = await props.searchParams
 
-  const [data, branches, divisions, vendors, categories] = await Promise.all([
-    getAssetMaintenances(params),
-    getBranches(),
-    getDivisions(),
-    getAllVendors(),
-    getAllCategory()
-  ])
+  const data = await getAssetMaintenances(params)
 
-  return <AssetList data={data} branches={branches} divisions={divisions} vendors={vendors} categories={categories} />
+  return <AssetList data={data} />
 }
 
 export default AssetMaintenance

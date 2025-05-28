@@ -12,7 +12,7 @@ export const getAssetMaintenances = async (params: AssetSearchParams) => {
   try {
     const apiObj = await api()
     const { data } = await apiObj.get('/asset-repairs', {
-      params: { ...params, include: 'asset.product.category,branch,division,vendor' }
+      params: { ...params, include: 'asset.item.brand,asset.item.product.category,branch,division,vendor' }
     })
 
     return data
@@ -36,7 +36,7 @@ export const getMaintenance = async (id: string) => {
   try {
     const apiObj = await api()
     const { data } = await apiObj.get(`/asset-repairs/${id}}`, {
-      params: { include: 'asset.product.category,branch,division,vendor' }
+      params: { include: 'asset.item.brand,asset.item.product.category,branch,division,vendor' }
     })
 
     return data.data

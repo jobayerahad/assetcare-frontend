@@ -9,6 +9,7 @@ import { FaSave as SaveIcon } from 'react-icons/fa'
 import { MdUpdate as UpdateIcon } from 'react-icons/md'
 
 import ProductsMenu from './products'
+import ItemsMenu from './items'
 import { addAsset, updateAsset } from '@actions/assets'
 import { StatusMsg } from '@config/constants'
 import { assetFormSchema } from '@schemas/asset.schema'
@@ -31,10 +32,9 @@ const AssetForm = ({ initialValues, assetId, branches, divisions, categories }: 
     initialValues: {
       branch_id: null,
       division_id: null,
-      product_id: null,
+      item_id: null,
       category: null,
-      brand: '',
-      model: '',
+      product: null,
       serial_number: '',
       status: 'active',
       current_location_type: 'branch',
@@ -108,19 +108,16 @@ const AssetForm = ({ initialValues, assetId, branches, divisions, categories }: 
         {values.category && <ProductsMenu categoryId={values.category!} getInputProps={getInputProps} />}
       </SimpleGrid>
 
-      <SimpleGrid cols={2} mb="xs">
-        <TextInput label="Brand" placeholder="Enter brand" withAsterisk {...getInputProps('brand')} />
+      <SimpleGrid cols={values.product ? 2 : 1} mb="xs">
+        {values.product && <ItemsMenu productId={values.product!} getInputProps={getInputProps} />}
 
-        <TextInput label="Model" placeholder="Enter model" withAsterisk {...getInputProps('model')} />
+        <TextInput
+          label="Serial Number"
+          placeholder="Enter serial number"
+          withAsterisk
+          {...getInputProps('serial_number')}
+        />
       </SimpleGrid>
-
-      <TextInput
-        label="Serial Number"
-        placeholder="Enter serial number"
-        mb="xs"
-        withAsterisk
-        {...getInputProps('serial_number')}
-      />
 
       <Textarea label="Remarks" placeholder="Write remarks (if any)" rows={4} mb="sm" {...getInputProps('remarks')} />
 

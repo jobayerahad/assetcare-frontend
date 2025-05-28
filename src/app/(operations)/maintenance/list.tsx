@@ -13,17 +13,13 @@ import TitleBar from '@components/common/title-bar'
 import TableNav from '@components/common/table-nav'
 import useNavigation from '@hooks/useNavigation'
 import { getAssetStatus } from '@utils/helpers'
-import { PaginationResponse, TAsset, TAssetMaintenance, TBranch, TCategory, TDivision, TVendor } from '@types'
+import { PaginationResponse, TAssetMaintenance } from '@types'
 
 type Props = {
   data: PaginationResponse<TAssetMaintenance>
-  branches: TBranch[]
-  divisions: TDivision[]
-  vendors: TVendor[]
-  categories: TCategory[]
 }
 
-const MaintenanceList = ({ data: { data, meta }, branches, divisions, vendors, categories }: Props) => {
+const MaintenanceList = ({ data: { data, meta } }: Props) => {
   const searchParams = useSearchParams()!
   const { navigate } = useNavigation()
 
@@ -64,8 +60,8 @@ const MaintenanceList = ({ data: { data, meta }, branches, divisions, vendors, c
               <Table.Thead style={{ userSelect: 'none' }}>
                 <Table.Tr>
                   <Table.Th>Sl.</Table.Th>
-                  <Table.Th>Asset</Table.Th>
                   <Table.Th>Branch</Table.Th>
+                  <Table.Th>Asset</Table.Th>
                   <Table.Th>Brand</Table.Th>
                   <Table.Th>Model</Table.Th>
                   <Table.Th>Serial No.</Table.Th>
@@ -79,10 +75,10 @@ const MaintenanceList = ({ data: { data, meta }, branches, divisions, vendors, c
                 {data.map((item, index) => (
                   <Table.Tr key={index}>
                     <Table.Td>{index + 1}</Table.Td>
-                    <Table.Td>{item.asset?.product?.name}</Table.Td>
                     <Table.Td>{item.branch.code === '0001' ? item.division?.name : item.branch.name}</Table.Td>
-                    <Table.Td>{item.asset.brand}</Table.Td>
-                    <Table.Td>{item.asset.model}</Table.Td>
+                    <Table.Td>{item.asset?.item?.product?.name}</Table.Td>
+                    <Table.Td>{item.asset.item?.brand?.name}</Table.Td>
+                    <Table.Td>{item.asset.item?.model}</Table.Td>
                     <Table.Td>{item.asset.serial_number}</Table.Td>
                     <Table.Td>{new Date(item.created_at).toLocaleString('en-BD', { dateStyle: 'medium' })}</Table.Td>
                     <Table.Td>

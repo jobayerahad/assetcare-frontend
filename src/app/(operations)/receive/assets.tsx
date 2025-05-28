@@ -2,7 +2,7 @@ import { Select } from '@mantine/core'
 import { useQuery } from '@tanstack/react-query'
 
 import { getAllAsset } from '@actions/assets'
-import { TAsset } from '@types'
+import { TFilteredAsset } from '@types'
 
 type Props = {
   productId: string
@@ -22,9 +22,9 @@ const AssetsMenu = ({ productId, getInputProps }: Props) => {
       placeholder="Select asset"
       data={
         data && data?.length > 0
-          ? data.map(({ id, serial_number, model, brand }: TAsset) => ({
+          ? data.map(({ id, model, brand, product, serial_no }: TFilteredAsset) => ({
               value: id.toString(),
-              label: `Brand: ${brand}, Model: ${model}, Sl: ${serial_number}`
+              label: `Product: ${product}, Brand: ${brand}, Model: ${model}, Sl: ${serial_no}`
             }))
           : []
       }

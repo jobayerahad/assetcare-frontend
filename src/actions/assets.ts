@@ -12,7 +12,7 @@ export const getAssets = async (params: AssetSearchParams) => {
   try {
     const apiObj = await api()
     const { data } = await apiObj.get('/assets', {
-      params: { ...params, include: 'branch,division,product,product.category' }
+      params: { ...params, include: 'branch,division,item.product.category,item.brand' }
     })
 
     return data

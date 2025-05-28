@@ -17,7 +17,7 @@ import TableNav from '@components/common/table-nav'
 import useNavigation from '@hooks/useNavigation'
 import { deleteAsset } from '@actions/assets'
 import { getMessage } from '@utils/notification'
-import { PaginationResponse, TAsset, TAssetForm, TBranch, TCategory, TDivision, TVendor } from '@types'
+import { PaginationResponse, TAsset, TAssetForm, TBranch, TCategory, TDivision } from '@types'
 
 type Props = {
   data: PaginationResponse<TAsset>
@@ -128,9 +128,9 @@ const AssetList = ({ data: { data, meta }, branches, divisions, categories }: Pr
                   <Table.Tr key={index}>
                     <Table.Td>{index + 1}</Table.Td>
                     <Table.Td>{item.branch.code === '0001' ? item.division.name : item.branch.name}</Table.Td>
-                    <Table.Td>{item.product?.name}</Table.Td>
-                    <Table.Td>{item.brand}</Table.Td>
-                    <Table.Td>{item.model}</Table.Td>
+                    <Table.Td>{item.item?.product?.name}</Table.Td>
+                    <Table.Td>{item.item?.brand?.name}</Table.Td>
+                    <Table.Td>{item.item?.model}</Table.Td>
                     <Table.Td>{item.serial_number}</Table.Td>
 
                     <Table.Td>
@@ -146,16 +146,15 @@ const AssetList = ({ data: { data, meta }, branches, divisions, categories }: Pr
                             leftSection={<EditIcon />}
                             onClick={() =>
                               editHandler(item.id, {
-                                branch_id: item.branch_id.toString(),
-                                division_id: item.division_id.toString(),
-                                product_id: item.product_id.toString(),
-                                category: item.product?.category?.id.toString(),
-                                brand: item.brand,
-                                model: item.model,
-                                serial_number: item.serial_number,
-                                status: item.status,
-                                current_location_type: item.current_location_type,
-                                current_location_id: item.current_location_id.toString(),
+                                branch_id: item?.branch_id?.toString(),
+                                division_id: item?.division_id?.toString(),
+                                product: item?.item?.product_id?.toString(),
+                                category: item?.item?.product?.category_id?.toString(),
+                                item_id: item?.item_id?.toString(),
+                                serial_number: item?.serial_number,
+                                status: item?.status,
+                                current_location_type: item?.current_location_type,
+                                current_location_id: item?.current_location_id?.toString(),
                                 remarks: item.remarks
                               })
                             }

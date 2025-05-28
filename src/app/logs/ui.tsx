@@ -25,13 +25,13 @@ const LogList = ({ data: { data, meta }, filters }: Props) => {
   const limit = searchParams.get('per_page') || '10'
   const action = searchParams.get('action') || ''
   const model = searchParams.get('model') || ''
-  const user = searchParams.get('user') || ''
+  const user = searchParams.get('user_id') || ''
 
   const handlePageChange = (val: number) => navigate({ page: val.toString() })
   const handleLimitChange = (val: string | null) => navigate({ per_page: val! })
   const handleActionChange = (val: string | null) => navigate({ action: val || '' })
   const handleModelChange = (val: string | null) => navigate({ model: val || '' })
-  const handleUserChange = (val: string | null) => navigate({ user: val || '' })
+  const handleUserChange = (val: string | null) => navigate({ user_id: val || '' })
 
   const viewHandler = (data: TLog) =>
     openModal({
@@ -44,7 +44,7 @@ const LogList = ({ data: { data, meta }, filters }: Props) => {
   return (
     <Container size="lg">
       <Group mb="xs" justify="space-between">
-        <TitleBar title="Logs" url="/" />
+        <TitleBar title="Logs" />
 
         <Group gap="xs">
           <Select

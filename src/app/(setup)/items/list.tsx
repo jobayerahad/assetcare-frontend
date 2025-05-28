@@ -79,7 +79,7 @@ const AssetItems = ({ data: { data, meta }, brands, categories }: Props) => {
   return (
     <Container size="lg">
       <Group justify="space-between" mb="xs">
-        <TitleBar title="Asset Item List" />
+        <TitleBar title="Asset Items" />
 
         <Group gap="xs">
           <TextInput

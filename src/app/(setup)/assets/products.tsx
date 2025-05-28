@@ -31,7 +31,7 @@ const ProductsMenu = ({ categoryId, getInputProps }: Props) => {
       searchable
       withAsterisk
       disabled={isLoading || isFetching}
-      {...getInputProps('product_id')}
+      {...getInputProps('product')}
     />
   )
 }

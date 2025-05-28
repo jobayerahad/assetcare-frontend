@@ -17,7 +17,7 @@ const TitleBar = ({ title }: Props) => {
         </ActionIcon>
       </Tooltip>
 
-      <Title order={5} ta="center">
+      <Title order={4} ta="center">
         {title}
       </Title>
     </Group>

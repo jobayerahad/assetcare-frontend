@@ -11,6 +11,7 @@ import { MdUpdate as UpdateIcon } from 'react-icons/md'
 
 import ProductsMenu from './products'
 import ComponentsMenu from './components'
+import ItemsMenu from './items'
 import { addServiceApproval, updateServiceApproval } from '@actions/service-approvals'
 import { StatusMsg } from '@config/constants'
 import { serviceApprovalSchema } from '@schemas/service-approval.schema'
@@ -32,8 +33,9 @@ const ServiceApprovalForm = ({ initialValues, approvalId, categories, vendors }:
     initialValues: {
       category: null,
       product: null,
-      component: null,
-      vendor: null,
+      item_id: null,
+      component_id: null,
+      vendor_id: null,
       cost: '',
       description: '',
       ...initialValues,
@@ -45,20 +47,20 @@ const ServiceApprovalForm = ({ initialValues, approvalId, categories, vendors }:
   const submitHandler = (formData: TServiceApprovalForm) =>
     startTransition(async () => {
       const is_selected = formData?.is_selected === '1' ? true : false
-      // const year = formData?.year? formData?.year?.substring(0, 4) : ''
-      const year = '2023'
-      const values = { ...formData, is_selected, year, component_id: formData.component, vendor_id: formData.vendor }
+      const year = formData?.year ? formData?.year?.substring(0, 4) : ''
+
+      const values = { ...formData, is_selected, year }
 
       const res = approvalId ? await updateServiceApproval(approvalId, values) : await addServiceApproval(values)
 
       showNotification(getMessage(res))
 
-      // if (res.status === StatusMsg.SUCCESS) closeAllModals()
+      if (res.status === StatusMsg.SUCCESS) closeAllModals()
     })
 
   return (
     <form onSubmit={onSubmit(submitHandler)}>
-      <SimpleGrid cols={2} mb="xs">
+      <SimpleGrid cols={values.category ? 2 : 1} mb="xs">
         <Select
           label="Category"
           placeholder="Select category"
@@ -71,9 +73,17 @@ const ServiceApprovalForm = ({ initialValues, approvalId, categories, vendors }:
           {...getInputProps('category')}
         />
 
-        <ProductsMenu categoryId={values.category!} getInputProps={getInputProps} />
-        <ComponentsMenu productId={values.product!} getInputProps={getInputProps} />
+        {values.category && <ProductsMenu categoryId={values.category!} getInputProps={getInputProps} />}
+      </SimpleGrid>
 
+      {values.product && (
+        <SimpleGrid cols={2} mb="xs">
+          <ItemsMenu productId={values.product!} getInputProps={getInputProps} />
+          <ComponentsMenu productId={values.product!} getInputProps={getInputProps} />
+        </SimpleGrid>
+      )}
+
+      <SimpleGrid cols={3} mb="xs">
         <Select
           label="Vendor"
           placeholder="Select vendor"
@@ -83,7 +93,7 @@ const ServiceApprovalForm = ({ initialValues, approvalId, categories, vendors }:
           }))}
           searchable
           withAsterisk
-          {...getInputProps('vendor')}
+          {...getInputProps('vendor_id')}
         />
 
         <NumberInput

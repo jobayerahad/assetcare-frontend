@@ -1,5 +1,6 @@
 'use client'
 
+import pluralize from 'pluralize'
 import { useSearchParams } from 'next/navigation'
 import {
   ActionIcon,
@@ -162,7 +163,10 @@ const ServiceApprovalUI = ({ data: { data, meta }, categories, vendors }: Props)
 
               <Table.Tbody>
                 {data.map(
-                  ({ id, component, vendor, year, cost, component_id, vendor_id, description, is_selected }, index) => (
+                  (
+                    { id, component, vendor, year, cost, component_id, vendor_id, item_id, description, is_selected },
+                    index
+                  ) => (
                     <Table.Tr key={index}>
                       <Table.Td>{index + 1}</Table.Td>
                       <Table.Td>{component?.product?.category?.name}</Table.Td>
@@ -188,12 +192,13 @@ const ServiceApprovalUI = ({ data: { data, meta }, categories, vendors }: Props)
                               onClick={() =>
                                 editHandler(id, {
                                   category: component?.product?.category?.id.toString(),
-                                  component: component_id.toString(),
+                                  item_id: item_id.toString(),
+                                  component_id: component_id.toString(),
                                   cost,
                                   description,
                                   is_selected,
                                   product: component?.product?.id.toString(),
-                                  vendor: vendor_id.toString(),
+                                  vendor_id: vendor_id.toString(),
                                   year: year.toString()
                                 })
                               }
@@ -215,7 +220,7 @@ const ServiceApprovalUI = ({ data: { data, meta }, categories, vendors }: Props)
           </Paper>
 
           <TableNav
-            listName="service approvals"
+            listName={pluralize('service approval', meta.total)}
             limit={limit}
             limitHandler={handleLimitChange}
             page={page}

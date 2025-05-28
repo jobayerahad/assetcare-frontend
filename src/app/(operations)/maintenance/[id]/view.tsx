@@ -3,7 +3,6 @@
 import {
   ActionIcon,
   Badge,
-  Button,
   Container,
   Divider,
   Group,
@@ -14,10 +13,9 @@ import {
   Title,
   Tooltip
 } from '@mantine/core'
-import { VscDebugStart as StartIcon } from 'react-icons/vsc'
-import { closeAllModals, openModal } from '@mantine/modals'
+import { openModal } from '@mantine/modals'
 import { GiBroom as ScrapIcon } from 'react-icons/gi'
-import { IoIosMore as MoreIcon, IoIosSend as SendIcon } from 'react-icons/io'
+import { IoIosSend as SendIcon } from 'react-icons/io'
 import { TbReportAnalytics as DiagnoseIcon } from 'react-icons/tb'
 
 import TitleBar from '@components/common/title-bar'
@@ -114,10 +112,10 @@ const MaintenanceDetailUI = ({ data, vendors }: Props) => {
         <Table withTableBorder withColumnBorders striped>
           <Table.Tbody>
             {[
-              { title: 'Category', value: data?.asset?.product?.category?.name },
-              { title: 'Asset', value: data?.asset?.product?.name },
-              { title: 'Brand', value: data?.asset?.brand },
-              { title: 'Model', value: data?.asset?.model },
+              { title: 'Category', value: data?.asset?.item?.product?.category?.name },
+              { title: 'Asset', value: data?.asset?.item?.product?.name },
+              { title: 'Brand', value: data?.asset?.item?.brand?.name },
+              { title: 'Model', value: data?.asset?.item?.model },
               { title: 'Serial Number', value: data?.asset?.serial_number }
             ].map(({ title, value }, index) => (
               <Table.Tr key={index}>

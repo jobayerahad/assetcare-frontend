@@ -31,7 +31,7 @@ const ComponentsMenu = ({ productId, getInputProps }: Props) => {
       searchable
       required
       disabled={isLoading || isFetching}
-      {...getInputProps('component')}
+      {...getInputProps('component_id')}
     />
   )
 }

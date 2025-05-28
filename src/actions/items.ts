@@ -21,14 +21,14 @@ export const getItems = async (params: SearchParams) => {
   }
 }
 
-export const getAllItems = async () => {
+export const getAllItems = async (productId: string) => {
   try {
     const apiObj = await api()
-    const { data } = await apiObj.get('/items/all')
+    const { data } = await apiObj.get(`/products/${productId}/items`)
 
     return data.data
   } catch (error) {
-    notFound()
+    return []
   }
 }
 

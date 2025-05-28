@@ -3,8 +3,9 @@ import * as yup from 'yup'
 export const serviceApprovalSchema = yup.object().shape({
   category: yup.string().nullable().required('Category is required'),
   product: yup.string().nullable().required('Product is required'),
-  component: yup.string().nullable().required('Component is required'),
-  vendor: yup.string().nullable().required('Vendor is required'),
+  item_id: yup.string().required('Item is required'),
+  component_id: yup.string().required('Component is required'),
+  vendor_id: yup.string().required('Vendor is required'),
   cost: yup.number().typeError('Cost must be a number').required('Cost is required'),
   year: yup
     .date()

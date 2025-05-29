@@ -55,7 +55,7 @@ const ServiceApprovalForm = ({ initialValues, approvalId, categories, vendors }:
 
       showNotification(getMessage(res))
 
-      if (res.status === StatusMsg.SUCCESS) closeAllModals()
+      // if (res.status === StatusMsg.SUCCESS) closeAllModals()
     })
 
   return (

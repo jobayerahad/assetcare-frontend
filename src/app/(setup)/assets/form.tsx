@@ -56,10 +56,10 @@ const AssetForm = ({ initialValues, assetId, branches, divisions, categories }: 
 
       showNotification(getMessage(res))
 
-      if (res.status === StatusMsg.SUCCESS) {
-        reset()
-        closeAllModals()
-      }
+      // if (res.status === StatusMsg.SUCCESS) {
+      //   reset()
+      //   closeAllModals()
+      // }
     })
 
   return (

@@ -6,6 +6,7 @@ import {
   Container,
   Divider,
   Group,
+  NumberFormatter,
   Paper,
   Table,
   Text,
@@ -96,13 +97,22 @@ const MaintenanceDetailUI = ({ data, vendors }: Props) => {
       <Group justify="space-between" mb="sm">
         <Text size="sm">
           <strong>Belongs To: </strong>
-          {data.branch?.code === '0001' ? data.division?.name : `${data.branch?.name} (${data.branch?.code})`}
+          {data.branch?.code === '0001'
+            ? `${data.branch?.name} (${data.division?.name})`
+            : `${data.branch?.name} (${data.branch?.code})`}
         </Text>
 
-        <Text size="sm">
-          <strong>On Repair: </strong>
-          {new Date(data.created_at).toLocaleString('en-BD', { dateStyle: 'medium', timeStyle: 'medium' })}
-        </Text>
+        {data.repair_date ? (
+          <Text size="sm">
+            <strong>Repaired at: </strong>
+            {new Date(data.repair_date).toLocaleString('en-BD', { dateStyle: 'medium', timeStyle: 'medium' })}
+          </Text>
+        ) : (
+          <Text size="sm">
+            <strong>On Repair: </strong>
+            {new Date(data.created_at).toLocaleString('en-BD', { dateStyle: 'medium', timeStyle: 'medium' })}
+          </Text>
+        )}
       </Group>
 
       <Paper shadow="xs" p="sm" mb="xs">
@@ -127,14 +137,32 @@ const MaintenanceDetailUI = ({ data, vendors }: Props) => {
         </Table>
       </Paper>
 
-      {['in_progress', 'repaired', 'returned_to_branch'].includes(data.status) && (
-        <Paper shadow="xs" p="sm" mb="xs">
-          <Textarea label="Diagnosis Details" rows={4} value={data.diagnosis_details || 'N/A'} readOnly />
-        </Paper>
-      )}
+      {['in_progress', 'repaired', 'returned_to_branch'].includes(data.status) &&
+        (data.diagnosis_details ? (
+          <Paper shadow="xs" p="sm" mb="xs">
+            <Textarea label="Diagnosis Details" rows={4} value={data.diagnosis_details} readOnly />
+          </Paper>
+        ) : (
+          <Text mb="xs" size="sm">
+            <strong>Diagnosis Details: </strong>Not Available
+          </Text>
+        ))}
 
       {['repaired', 'returned_to_branch'].includes(data.status) && (
-        <Textarea label="Repair Details" rows={3} value={data.repair_details || 'N/A'} mb="sm" readOnly />
+        <Paper shadow="xs" p="sm" mb="xs">
+          <Text mb={8} size="sm">
+            <strong>Repaired By: </strong>
+            {data.vendor?.name}
+          </Text>
+
+          <Text mb={8} size="sm">
+            <strong>Repaired Cost: </strong>
+
+            <NumberFormatter thousandSeparator thousandsGroupStyle="lakh" suffix=" BDT" value={data.repair_cost} />
+          </Text>
+
+          <Textarea label="Repair Details" rows={4} value={data.repair_details || 'N/A'} readOnly />
+        </Paper>
       )}
     </Container>
   )

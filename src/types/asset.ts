@@ -87,4 +87,6 @@ export type TFilteredAsset = {
   model: string
   product: string
   brand: string
+  branch: string
+  division: string | null
 }

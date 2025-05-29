@@ -4,7 +4,7 @@ import Link from 'next/link'
 import pluralize from 'pluralize'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { ActionIcon, Alert, Badge, Container, Group, Paper, Table, TextInput, Tooltip } from '@mantine/core'
+import { ActionIcon, Alert, Badge, Container, Group, Paper, Select, Table, TextInput, Tooltip } from '@mantine/core'
 import { useDebouncedValue } from '@mantine/hooks'
 import { FaEye as ViewIcon } from 'react-icons/fa'
 import { FiSearch as SearchIcon } from 'react-icons/fi'
@@ -13,13 +13,14 @@ import TitleBar from '@components/common/title-bar'
 import TableNav from '@components/common/table-nav'
 import useNavigation from '@hooks/useNavigation'
 import { getAssetStatus } from '@utils/helpers'
-import { PaginationResponse, TAssetMaintenance } from '@types'
+import { PaginationResponse, TAssetMaintenance, TBranch } from '@types'
 
 type Props = {
   data: PaginationResponse<TAssetMaintenance>
+  branches: TBranch[]
 }
 
-const MaintenanceList = ({ data: { data, meta } }: Props) => {
+const MaintenanceList = ({ data: { data, meta }, branches }: Props) => {
   const searchParams = useSearchParams()!
   const { navigate } = useNavigation()
 
@@ -28,9 +29,11 @@ const MaintenanceList = ({ data: { data, meta } }: Props) => {
 
   const page = Number(searchParams.get('page')) || 1
   const limit = searchParams.get('per_page') || '10'
+  const branch = searchParams.get('branch') || ''
 
   const handlePageChange = (val: number) => navigate({ page: val.toString() })
   const handleLimitChange = (val: string | null) => navigate({ per_page: val! })
+  const handleBranchChange = (val: string | null) => navigate({ branch: val! })
 
   useEffect(() => {
     const currentSearch = searchParams.get('search') || ''
@@ -43,12 +46,26 @@ const MaintenanceList = ({ data: { data, meta } }: Props) => {
         <TitleBar title="Asset Maintenance" />
 
         <Group gap="xs">
+          <Select
+            placeholder="Select branch"
+            data={branches.map(({ id, name, code }) => ({
+              value: id.toString(),
+              label: `${name} (${code})`
+            }))}
+            value={branch}
+            onChange={handleBranchChange}
+            size="xs"
+            searchable
+            w={170}
+          />
+
           <TextInput
             placeholder="Search here..."
             value={interSearch}
             onChange={(event) => setInterSearch(event.currentTarget.value)}
             leftSection={<SearchIcon />}
-            miw={300}
+            size="xs"
+            miw={250}
           />
         </Group>
       </Group>

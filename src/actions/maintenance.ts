@@ -8,6 +8,20 @@ import { StatusMsg } from '@config/constants'
 import { handleError } from '@utils/helpers'
 import { ActionResponse, AssetSearchParams } from '@types'
 
+export const addRepair = async (formData: any): Promise<ActionResponse> => {
+  try {
+    const apiObj = await api()
+    const { data } = await apiObj.post('/asset-repairs', formData)
+
+    return {
+      status: StatusMsg.SUCCESS,
+      message: data.message
+    }
+  } catch (error) {
+    return handleError(error)
+  }
+}
+
 export const getAssetMaintenances = async (params: AssetSearchParams) => {
   try {
     const apiObj = await api()

@@ -18,6 +18,17 @@ export const getProducts = async (catId: string) => {
   }
 }
 
+export const getAllProduct = async () => {
+  try {
+    const apiObj = await api()
+    const { data } = await apiObj.get('/products/all')
+
+    return data.data
+  } catch (error) {
+    return []
+  }
+}
+
 export const addProduct = async (formData: TProductForm): Promise<ActionResponse> => {
   try {
     const apiObj = await api()

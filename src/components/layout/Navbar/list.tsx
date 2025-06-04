@@ -63,10 +63,10 @@ export const menuItems = [
     label: 'Reporting',
     icon: <ReportIcon />,
     links: [
+      { link: '/repair-history', label: 'Repair History' },
       { link: '/periodic-billing-records', label: 'Periodic Billing Records' },
       { link: '/most-repaired-items', label: 'Most Repaired Items' },
-      { link: '/expired-items', label: 'Expired Items' },
-      { link: '/individual-repair-history', label: 'Individual Repair History' }
+      { link: '/expired-items', label: 'Expired Items' }
     ]
   },
   { link: '/logs', label: 'Logs', icon: <LogIcon /> }

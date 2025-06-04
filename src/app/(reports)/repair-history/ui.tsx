@@ -12,6 +12,7 @@ import { getRepairReport } from '@actions/reports'
 import { StatusMsg } from '@config/constants'
 import { getMessage } from '@utils/notification'
 import { TBranch, TDivision, TProduct, TRepairHistory, TRepairHistoryForm } from '@types'
+import { DatePickerInput } from '@mantine/dates'
 
 type Props = {
   branches: TBranch[]
@@ -23,11 +24,13 @@ const RepairHistoryUI = ({ branches, divisions, products }: Props) => {
   const [isLoading, startTransition] = useTransition()
   const [data, setData] = useState<TRepairHistory[]>([])
 
-  const { onSubmit, getInputProps, values, reset } = useForm<TRepairHistoryForm>({
+  const { onSubmit, getInputProps, values } = useForm<TRepairHistoryForm>({
     initialValues: {
       branch_id: null,
       division_id: null,
-      product_id: null
+      product_id: null,
+      from_date: null,
+      to_date: null
     }
   })
 
@@ -41,10 +44,7 @@ const RepairHistoryUI = ({ branches, divisions, products }: Props) => {
       })
 
       showNotification(getMessage(res))
-      if (res.status === StatusMsg.SUCCESS) {
-        setData(res.data)
-        reset()
-      }
+      if (res.status === StatusMsg.SUCCESS) setData(res.data)
     })
 
   return (
@@ -53,7 +53,7 @@ const RepairHistoryUI = ({ branches, divisions, products }: Props) => {
 
       <Paper shadow="xs" p="sm" mt="xs" component="form" onSubmit={onSubmit(submitHandler)}>
         <Group gap="xs" align="flex-end">
-          <SimpleGrid cols={isHeadOffice ? 3 : 2} spacing="xs" flex={1}>
+          <SimpleGrid cols={isHeadOffice ? 5 : 4} spacing="xs" flex={1}>
             <Select
               label="Branch"
               placeholder="Select branch"
@@ -88,6 +88,10 @@ const RepairHistoryUI = ({ branches, divisions, products }: Props) => {
               searchable
               {...getInputProps('product_id')}
             />
+
+            <DatePickerInput label="From Date" placeholder="Select from date" {...getInputProps('from_date')} />
+
+            <DatePickerInput label="To date" placeholder="Select to date" {...getInputProps('to_date')} />
           </SimpleGrid>
 
           <Button type="submit" leftSection={<SearchIcon />} loading={isLoading}>

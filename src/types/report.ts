@@ -2,6 +2,8 @@ export type TRepairHistoryForm = {
   branch_id: string | null
   division_id: string | null
   product_id: string | null
+  from_date: string | null
+  to_date: string | null
 }
 
 export type TRepairHistory = {

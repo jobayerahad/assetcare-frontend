@@ -41,7 +41,7 @@ const columns: ColumnDef<TRepairHistory, any>[] = [
   {
     accessorKey: 'branch',
     header: 'Branch/Division',
-    cell: ({ getValue, row: { original } }) => (original.division ? original.division : getValue())
+    cell: ({ getValue, row: { original } }) => (original.branch === 'Head Office' ? original.division : getValue())
   },
   {
     accessorKey: 'vendor',
